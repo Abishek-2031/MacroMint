@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String
+  passwordHash  String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  profile       Profile?
+  mealLogs      MealLog[]
+  orders        Order[]
+  chatMessages  ChatMessage[]
+}
+
+model Profile {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Step 1: Basics
+  sex               String   // male | female
+  age               Int
+  heightCm          Float
+  weightKg          Float
+  
+  // Step 2: Lifestyle
+  activityLevel     String   // sedentary | lightly_active | moderately_active | very_active | extra_active
+  goal              String   // fat_loss | muscle_gain | recomposition | maintenance
+  weeklyPace        String   // 0.25 | 0.5 | 0.75 | 1.0 kg/week
+  
+  // Step 3: Preferences
+  diet              String   // veg | eggetarian | non_veg | vegan | jain
+  regionalPref      String   // south_indian | north_indian | pan_indian | continental
+  allergies         String   // JSON array as string
+  dailyBudget       Int      // INR per day
+  
+  // Calculated values
+  bmr               Float
+  tdee              Float
+  dailyCalories     Float
+  proteinG          Float
+  carbsG            Float
+  fatG              Float
+  
+  // 7-day meal plan (JSON)
+  mealPlan          String   // JSON
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model MealLog {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date        String   // YYYY-MM-DD
+  mealId      String   // meal identifier from meal plan
+  eaten       Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, date, mealId])
+}
+
+model Order {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items           String   // JSON array
+  totalAmount     Float
+  paymentMethod   String   // upi | card | cod
+  paymentStatus   String   @default("pending") // pending | paid | failed
+  deliveryAddress String   // JSON
+  status          String   @default("placed") // placed | confirmed | preparing | out_for_delivery | delivered
+  estimatedTime   Int      @default(20) // minutes
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model KnowledgeBase {
+  id          String   @id @default(cuid())
+  category    String   // dish | rule | ingredient
+  name        String
+  data        String   // JSON
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  role      String   // user | assistant
+  content   String
+  createdAt DateTime @default(now())
+}
+

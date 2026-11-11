@@ -1,0 +1,2718 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MacroMint — Adaptive Nutrition OS for India</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif'],
+          },
+          colors: {
+            obsidian: '#0A2540',
+            canvas: '#F8FAFC',
+            slateBorder: '#E2E8F0',
+            royalIndigo: '#635BFF',
+            royalIndigoDark: '#4E45E4',
+            warmCoral: '#FF5E5B',
+            amberGold: '#F59E0B',
+            freshTeal: '#00D4B6',
+            freshTealDark: '#00B89D',
+          },
+          boxShadow: {
+            'stripe': '0 13px 27px -5px rgba(50,50,93,0.15), 0 8px 16px -8px rgba(0,0,0,0.18)',
+            'stripe-sm': '0 4px 6px -1px rgba(50,50,93,0.08), 0 2px 4px -1px rgba(0,0,0,0.05)',
+            'stripe-lg': '0 30px 60px -12px rgba(50,50,93,0.25), 0 18px 36px -18px rgba(0,0,0,0.3)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Stripe Animated Mesh Gradient */
+    .mesh-gradient-stripe {
+      background: linear-gradient(135deg, #0A2540 0%, #151e3f 30%, #1a1b4b 60%, #0A2540 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .mesh-gradient-stripe::before {
+      content: '';
+      position: absolute;
+      width: 160%;
+      height: 160%;
+      top: -30%;
+      left: -30%;
+      background: radial-gradient(circle at 30% 30%, rgba(99,91,255,0.4) 0%, transparent 40%),
+                  radial-gradient(circle at 75% 65%, rgba(0,212,182,0.35) 0%, transparent 45%),
+                  radial-gradient(circle at 50% 85%, rgba(255,94,91,0.25) 0%, transparent 40%);
+      filter: blur(60px);
+      animation: floatMesh 18s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes floatMesh {
+      0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+      50% { transform: translate(-40px, 30px) rotate(4deg) scale(1.08); }
+      100% { transform: translate(30px, -20px) rotate(-3deg) scale(0.95); }
+    }
+    .card-spring {
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+    }
+    .card-spring:hover {
+      transform: translateY(-4px);
+    }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    /* Progress Ring SVG transition */
+    .progress-circle {
+      transition: stroke-dashoffset 0.85s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+  </style>
+</head>
+<body class="bg-canvas text-obsidian font-sans antialiased min-h-screen flex flex-col selection:bg-royalIndigo selection:text-white">
+
+  <!-- TOP APP HEADER / NAVBAR -->
+  <header class="sticky top-0 z-50 bg-obsidian/95 backdrop-blur-md border-b border-white/10 text-white transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="router.navigate('landing')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-royalIndigo via-[#7B74FF] to-freshTeal flex items-center justify-center font-display font-black text-xl shadow-lg shadow-royalIndigo/30">
+          M
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="font-display font-bold text-xl tracking-tight">MacroMint</span>
+            <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-freshTeal/20 text-freshTeal border border-freshTeal/30">India OS</span>
+          </div>
+          <p class="text-[10px] text-slate-400 -mt-1 tracking-wide">Adaptive Indian Nutrition</p>
+        </div>
+      </div>
+
+      <!-- Center Navigation Links -->
+      <nav class="hidden md:flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/10 text-sm">
+        <button onclick="router.navigate('landing')" class="nav-tab px-3.5 py-1.5 rounded-lg text-slate-300 hover:text-white transition font-medium text-xs tracking-wide" data-page="landing">Home</button>
+        <button onclick="router.navigate('dashboard')" class="nav-tab px-3.5 py-1.5 rounded-lg text-slate-300 hover:text-white transition font-medium text-xs tracking-wide" data-page="dashboard">7-Day Plan</button>
+        <button onclick="router.navigate('store')" class="nav-tab px-3.5 py-1.5 rounded-lg text-slate-300 hover:text-white transition font-medium text-xs tracking-wide" data-page="store">Kitchen Store</button>
+        <button onclick="router.navigate('onboarding')" class="nav-tab px-3.5 py-1.5 rounded-lg text-slate-300 hover:text-white transition font-medium text-xs tracking-wide" data-page="onboarding">BMR Wizard</button>
+      </nav>
+
+      <!-- Right Action Area: User status & Cart -->
+      <div class="flex items-center gap-3">
+        <!-- Quick Cart Trigger -->
+        <button onclick="toggleCartDrawer()" class="relative p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-2 text-xs font-semibold">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          <span class="hidden sm:inline">Kit Cart</span>
+          <span id="headerCartCount" class="w-5 h-5 rounded-full bg-warmCoral text-white text-[10px] flex items-center justify-center font-bold">0</span>
+        </button>
+
+        <!-- Auth state buttons (Dynamic) -->
+        <div id="authActions" class="flex items-center gap-2">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN APP ROUTER CONTAINER -->
+  <main id="appRoot" class="flex-grow">
+    <!-- Pages rendered dynamically here -->
+  </main>
+
+  <!-- QUICK CART DRAWER OVERLAY -->
+  <div id="cartDrawerBackdrop" class="fixed inset-0 z-50 bg-obsidian/60 backdrop-blur-sm hidden transition-opacity duration-300" onclick="toggleCartDrawer()"></div>
+  <div id="cartDrawer" class="fixed top-0 right-0 z-50 w-full max-w-md h-full bg-white shadow-stripe-lg transform translate-x-full transition-transform duration-300 flex flex-col">
+    <div class="p-5 border-b border-slateBorder flex items-center justify-between bg-slate-50">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-royalIndigo/10 text-royalIndigo flex items-center justify-center font-bold text-sm">🛒</div>
+        <div>
+          <h3 class="font-bold text-obsidian text-base">Your Nutrition Basket</h3>
+          <p class="text-xs text-slate-500">10-Min Kits & Cloud Kitchen Meals</p>
+        </div>
+      </div>
+      <button onclick="toggleCartDrawer()" class="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-500 flex items-center justify-center">✕</button>
+    </div>
+
+    <!-- Cart items list -->
+    <div id="cartItemsList" class="flex-1 overflow-y-auto p-5 space-y-3">
+      <!-- Injected -->
+    </div>
+
+    <!-- Cart Footer -->
+    <div class="p-5 border-t border-slateBorder bg-slate-50">
+      <div class="space-y-1.5 text-xs text-slate-600 mb-4">
+        <div class="flex justify-between"><span>Subtotal</span><span id="cartSubtotal" class="font-semibold text-obsidian">₹0</span></div>
+        <div class="flex justify-between"><span>Cloud Delivery (10-20 min)</span><span id="cartDeliveryFee" class="font-semibold text-freshTeal">FREE</span></div>
+        <div class="flex justify-between text-sm font-bold text-obsidian pt-2 border-t border-slateBorder">
+          <span>Total Payable</span><span id="cartTotal" class="text-royalIndigo text-base font-extrabold">₹0</span>
+        </div>
+      </div>
+      <button onclick="goToCheckout()" class="w-full py-3.5 bg-gradient-to-r from-royalIndigo to-royalIndigoDark text-white font-bold rounded-xl shadow-lg shadow-royalIndigo/30 hover:opacity-95 transition text-sm flex items-center justify-center gap-2">
+        Proceed to Checkout →
+      </button>
+    </div>
+  </div>
+
+  <!-- SWAP MEAL MODAL -->
+  <div id="swapModalBackdrop" class="fixed inset-0 z-50 bg-obsidian/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-stripe-lg border border-slateBorder relative animate-scaleUp">
+      <div class="flex justify-between items-start mb-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-royalIndigo">Macro Equalizer</span>
+          <h3 class="text-xl font-bold text-obsidian">Swap Dish Alternative</h3>
+          <p class="text-xs text-slate-500">Select an authentic macro-equivalent Indian recipe</p>
+        </div>
+        <button onclick="closeSwapModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center">✕</button>
+      </div>
+      
+      <div id="swapOptionsList" class="space-y-3 my-4">
+        <!-- Injected -->
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT PROFILE SLIDE-OVER DRAWER -->
+  <div id="profileDrawerBackdrop" class="fixed inset-0 z-50 bg-obsidian/60 backdrop-blur-sm hidden" onclick="toggleProfileDrawer()"></div>
+  <div id="profileDrawer" class="fixed top-0 right-0 z-50 w-full max-w-md h-full bg-white shadow-stripe-lg transform translate-x-full transition-transform duration-300 flex flex-col">
+    <div class="p-5 border-b border-slateBorder flex items-center justify-between bg-slate-50">
+      <div>
+        <h3 class="font-bold text-obsidian text-base">Edit Body Metrics</h3>
+        <p class="text-xs text-slate-500">Recalculates Mifflin-St Jeor TDEE dynamically</p>
+      </div>
+      <button onclick="toggleProfileDrawer()" class="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-500 flex items-center justify-center">✕</button>
+    </div>
+    
+    <div class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Weight (kg)</label>
+        <input type="number" id="drawerWeight" class="w-full px-3 py-2 border border-slateBorder rounded-xl text-sm font-semibold text-obsidian" step="0.5">
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Height (cm)</label>
+        <input type="number" id="drawerHeight" class="w-full px-3 py-2 border border-slateBorder rounded-xl text-sm font-semibold text-obsidian">
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Activity Level</label>
+        <select id="drawerActivity" class="w-full px-3 py-2 border border-slateBorder rounded-xl text-xs font-semibold text-obsidian">
+          <option value="sedentary">Sedentary (Desk Job)</option>
+          <option value="lightly_active">Lightly Active (1-3 days gym/walk)</option>
+          <option value="moderately_active">Moderately Active (3-5 days gym)</option>
+          <option value="very_active">Very Active (6-7 days intense)</option>
+          <option value="extra_active">Extra Active (Athlete/Physical Work)</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Goal Mode</label>
+        <select id="drawerGoal" class="w-full px-3 py-2 border border-slateBorder rounded-xl text-xs font-semibold text-obsidian">
+          <option value="fat_loss">Fat Loss (-500 kcal)</option>
+          <option value="muscle_gain">Muscle Gain (+300 kcal)</option>
+          <option value="recomposition">Body Recomposition (Maintenance ±0)</option>
+          <option value="maintenance">Health Maintenance</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Diet Style</label>
+        <select id="drawerDiet" class="w-full px-3 py-2 border border-slateBorder rounded-xl text-xs font-semibold text-obsidian">
+          <option value="veg">Pure Vegetarian</option>
+          <option value="eggetarian">Eggetarian</option>
+          <option value="non_veg">Non-Vegetarian</option>
+          <option value="vegan">Vegan</option>
+          <option value="jain">Jain Diet (No Onion/Garlic/Root)</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Daily Meal Budget (₹)</label>
+        <input type="range" id="drawerBudget" min="200" max="1500" step="50" class="w-full accent-royalIndigo" oninput="document.getElementById('drawerBudgetValue').innerText = '₹' + this.value">
+        <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+          <span>₹200</span>
+          <span id="drawerBudgetValue" class="font-bold text-royalIndigo">₹450</span>
+          <span>₹1500</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-5 border-t border-slateBorder bg-slate-50">
+      <button onclick="saveProfileDrawer()" class="w-full py-3 bg-royalIndigo hover:bg-royalIndigoDark text-white font-bold rounded-xl shadow-md text-xs transition">
+        Apply & Recalculate Dashboard
+      </button>
+    </div>
+  </div>
+
+  <!-- FLOATING AI NUTRITION CHATBOT & TRAINING STUDIO -->
+  <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <!-- Chat Window Container -->
+    <div id="aiChatWindow" class="w-96 max-w-[calc(100vw-2rem)] h-[480px] bg-white rounded-3xl shadow-stripe-lg border border-slateBorder overflow-hidden flex flex-col mb-3 hidden transform transition-all duration-300">
+      
+      <!-- Chat Header -->
+      <div class="bg-obsidian text-white p-4 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-freshTeal to-royalIndigo flex items-center justify-center text-sm font-bold text-obsidian shadow">
+            🧠
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="font-bold text-sm">MacroBot AI</span>
+              <span class="w-2 h-2 rounded-full bg-freshTeal animate-pulse"></span>
+            </div>
+            <p class="text-[10px] text-slate-400">Grounded in Indian Dietetics</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <!-- Train Button -->
+          <button onclick="openTrainModal()" class="px-2 py-1 text-[10px] font-bold rounded bg-white/10 hover:bg-white/20 text-freshTeal border border-freshTeal/30 flex items-center gap-1">
+            <span>+</span> Train
+          </button>
+          <button onclick="toggleChatWindow()" class="text-slate-400 hover:text-white p-1 text-sm">✕</button>
+        </div>
+      </div>
+
+      <!-- Chat Messages Container -->
+      <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+        <div class="flex gap-2">
+          <div class="w-6 h-6 rounded-full bg-freshTeal/20 text-freshTeal text-[10px] flex items-center justify-center font-bold flex-shrink-0 mt-0.5">AI</div>
+          <div class="bg-slate-100 p-3 rounded-2xl rounded-tl-sm text-slate-700 leading-relaxed">
+            Namaste! 🙏 I'm MacroBot, calibrated to Indian household diets. Ask me about BMR, TDEE, paneer vs chicken macros, ragi benefits, or type <span class="font-bold text-royalIndigo">"recommend dinner"</span>.
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick prompts -->
+      <div class="px-3 py-1.5 bg-slate-50 border-t border-slateBorder flex gap-1.5 overflow-x-auto hide-scrollbar text-[10px]">
+        <button onclick="sendQuickPrompt('Suggest a high protein Indian veg dinner under 400 kcal')" class="whitespace-nowrap px-2.5 py-1 bg-white border border-slateBorder rounded-full hover:border-royalIndigo text-slate-600">🥦 High Protein Veg</button>
+        <button onclick="sendQuickPrompt('What is my optimal protein intake for fat loss?')" class="whitespace-nowrap px-2.5 py-1 bg-white border border-slateBorder rounded-full hover:border-royalIndigo text-slate-600">🎯 Protein Target</button>
+        <button onclick="sendQuickPrompt('Why is Ragi Dosa better than white rice for insulin?')" class="whitespace-nowrap px-2.5 py-1 bg-white border border-slateBorder rounded-full hover:border-royalIndigo text-slate-600">🌾 Ragi Benefits</button>
+      </div>
+
+      <!-- Chat Input Field -->
+      <form onsubmit="handleChatSubmit(event)" class="p-3 border-t border-slateBorder bg-white flex gap-2">
+        <input type="text" id="chatInput" placeholder="Ask MacroBot anything..." class="flex-1 px-3 py-2 border border-slateBorder rounded-xl text-xs outline-none focus:border-royalIndigo">
+        <button type="submit" class="px-4 py-2 bg-royalIndigo hover:bg-royalIndigoDark text-white rounded-xl text-xs font-bold transition">Send</button>
+      </form>
+    </div>
+
+    <!-- Floating Chat Trigger Button -->
+    <button onclick="toggleChatWindow()" class="p-3.5 bg-gradient-to-tr from-royalIndigo to-freshTeal text-white rounded-full shadow-stripe-lg hover:scale-105 transition-transform flex items-center gap-2 group">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+      <span class="text-xs font-bold pr-1 hidden group-hover:inline transition-all">Chat with Nutrition AI</span>
+    </button>
+  </div>
+
+  <!-- TRAIN AI KNOWLEDGE BASE MODAL -->
+  <div id="trainModalBackdrop" class="fixed inset-0 z-50 bg-obsidian/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-stripe-lg border border-slateBorder relative animate-scaleUp">
+      <div class="flex justify-between items-start mb-3">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-freshTealDark bg-freshTeal/10 px-2 py-0.5 rounded">Live Knowledge Studio</span>
+          <h3 class="text-lg font-bold text-obsidian mt-1">Teach MacroBot a New Indian Recipe</h3>
+          <p class="text-xs text-slate-500">Inject custom regional dishes or kitchen specs live</p>
+        </div>
+        <button onclick="closeTrainModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center">✕</button>
+      </div>
+
+      <form onsubmit="handleTrainSubmit(event)" class="space-y-2.5 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-0.5">Dish Name</label>
+          <input type="text" id="trainName" required placeholder="e.g. Sattu Paratha with Curd" class="w-full px-3 py-1.5 border border-slateBorder rounded-lg">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-0.5">Calories (kcal)</label>
+            <input type="number" id="trainCals" required placeholder="350" class="w-full px-3 py-1.5 border border-slateBorder rounded-lg">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-0.5">Protein (g)</label>
+            <input type="number" id="trainProtein" required placeholder="18" class="w-full px-3 py-1.5 border border-slateBorder rounded-lg">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-0.5">Carbs (g)</label>
+            <input type="number" id="trainCarbs" required placeholder="42" class="w-full px-3 py-1.5 border border-slateBorder rounded-lg">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-0.5">Fat (g)</label>
+            <input type="number" id="trainFat" required placeholder="10" class="w-full px-3 py-1.5 border border-slateBorder rounded-lg">
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-0.5">Price in ₹</label>
+          <input type="number" id="trainPrice" required placeholder="120" class="w-full px-3 py-1.5 border border-slateBorder rounded-lg">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-0.5">Nutrition Insight / Rule</label>
+          <textarea id="trainInsight" rows="2" placeholder="e.g. High fiber bihar superfood with plant protein, ideal for cutting phase" class="w-full px-3 py-1.5 border border-slateBorder rounded-lg"></textarea>
+        </div>
+        <button type="submit" class="w-full py-2.5 bg-freshTeal hover:bg-freshTealDark text-obsidian font-bold rounded-xl shadow-md transition text-xs">
+          ⚡ Commit to AI Neural Knowledge Base
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toastContainer" class="fixed top-20 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT APPLICATION CORE (DATA, STATE, ROUTER & CONTROLLERS) -->
+  <!-- ========================================================================= -->
+  <script>
+    // --- 1. CORE DISHES & KNOWLEDGE REPOSITORY ---
+    const DEFAULT_DISHES = [
+      {
+        id: 'ragi-dosa',
+        name: 'Crispy Ragi Dosa & Fresh Coconut Chutney',
+        type: 'breakfast',
+        category: 'South Indian',
+        diet: 'veg',
+        calories: 285,
+        protein: 9,
+        carbs: 48,
+        fat: 7,
+        price: 95,
+        prepMins: 9,
+        badge: 'High Fiber & Iron',
+        emoji: '🫓',
+        desc: 'Fermented finger millet batter crisped in A2 ghee, served with fresh tempered coconut chutney & drumstick sambar.'
+      },
+      {
+        id: 'paneer-tikka-bowl',
+        name: 'Tandoori Paneer Tikka Power Bowl',
+        type: 'lunch',
+        category: 'North Indian',
+        diet: 'veg',
+        calories: 420,
+        protein: 28,
+        carbs: 35,
+        fat: 18,
+        price: 185,
+        prepMins: 20,
+        badge: 'Muscle Recomposition',
+        emoji: '🥗',
+        desc: '150g malai paneer cubes charred with bell peppers, served over high-protein foxtail millet and mint Greek raita.'
+      },
+      {
+        id: 'dal-tadka-phulka',
+        name: 'Homestyle Dal Tadka & 3 Whole Wheat Phulkas',
+        type: 'dinner',
+        category: 'Pan-Indian',
+        diet: 'veg',
+        calories: 380,
+        protein: 16,
+        carbs: 60,
+        fat: 9,
+        price: 120,
+        prepMins: 15,
+        badge: 'Gut Friendly Clean',
+        emoji: '🫕',
+        desc: 'Yellow toor dal tempered with hing, jeera, tomato and fresh coriander. Served with 3 soft oil-free phulkas.'
+      },
+      {
+        id: 'grilled-chicken-millet',
+        name: 'Grilled Herb Chicken & Foxtail Millet Khichdi',
+        type: 'lunch',
+        category: 'Pan-Indian',
+        diet: 'non_veg',
+        calories: 495,
+        protein: 42,
+        carbs: 40,
+        fat: 14,
+        price: 220,
+        prepMins: 20,
+        badge: 'Peak Protein Lean',
+        emoji: '🍗',
+        desc: 'Tender antibiotic-free grilled breast marinated in hung curd, served on a light bed of moong & foxtail millet.'
+      },
+      {
+        id: 'masala-egg-bhurji',
+        name: 'Street-Style Egg Bhurji & Multigrain Toast',
+        type: 'breakfast',
+        category: 'Pan-Indian',
+        diet: 'eggetarian',
+        calories: 340,
+        protein: 22,
+        carbs: 26,
+        fat: 14,
+        price: 110,
+        prepMins: 9,
+        badge: 'Quick Bioavailable',
+        emoji: '🍳',
+        desc: '3 eggs scrambled with farm tomatoes, green chillies and fresh onions, with 2 toasted artisan whole wheat slices.'
+      },
+      {
+        id: 'palak-tofu-rice',
+        name: 'Creamy Palak Tofu & Brown Rice Medley',
+        type: 'dinner',
+        category: 'North Indian',
+        diet: 'vegan',
+        calories: 360,
+        protein: 20,
+        carbs: 45,
+        fat: 11,
+        price: 160,
+        prepMins: 15,
+        badge: '100% Plant Power',
+        emoji: '🥬',
+        desc: 'Organic silken tofu simmered in garlic-infused baby spinach puree, accompanied by fragrant dehradun brown rice.'
+      }
+    ];
+
+    // --- 2. LOCALSTORAGE STATE INITIALIZATION ---
+    let appState = {
+      currentUser: JSON.parse(localStorage.getItem('mm_user')) || null,
+      profile: JSON.parse(localStorage.getItem('mm_profile')) || null,
+      cart: JSON.parse(localStorage.getItem('mm_cart')) || [],
+      customDishes: JSON.parse(localStorage.getItem('mm_custom_dishes')) || [],
+      mealLogs: JSON.parse(localStorage.getItem('mm_meal_logs')) || {}, // { "Monday_breakfast": true }
+      currentDay: 'Monday',
+      lastOrder: JSON.parse(localStorage.getItem('mm_last_order')) || null,
+    };
+
+    function saveState() {
+      localStorage.setItem('mm_user', JSON.stringify(appState.currentUser));
+      localStorage.setItem('mm_profile', JSON.stringify(appState.profile));
+      localStorage.setItem('mm_cart', JSON.stringify(appState.cart));
+      localStorage.setItem('mm_custom_dishes', JSON.stringify(appState.customDishes));
+      localStorage.setItem('mm_meal_logs', JSON.stringify(appState.mealLogs));
+      localStorage.setItem('mm_last_order', JSON.stringify(appState.lastOrder));
+      updateCartBadge();
+    }
+
+    function getAllDishes() {
+      return [...DEFAULT_DISHES, ...appState.customDishes];
+    }
+
+    // --- 3. TOAST SYSTEM ---
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      const bg = type === 'success' ? 'bg-obsidian border-freshTeal text-white' : 'bg-warmCoral text-white';
+      toast.className = `${bg} px-4 py-3 rounded-2xl shadow-stripe border flex items-center gap-3 text-xs font-semibold transform transition-all duration-300 pointer-events-auto`;
+      toast.innerHTML = `
+        <span>${type === 'success' ? '✨' : '⚠️'}</span>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // --- 4. CART SYSTEM ---
+    function addToCart(dishId, type = 'ready') {
+      const dishes = getAllDishes();
+      const dish = dishes.find(d => d.id === dishId);
+      if (!dish) return;
+
+      const cartId = `${dish.id}_${type}`;
+      const existing = appState.cart.find(item => item.cartId === cartId);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        appState.cart.push({
+          cartId: cartId,
+          dishId: dish.id,
+          name: dish.name,
+          emoji: dish.emoji,
+          price: type === 'kit' ? Math.round(dish.price * 0.85) : dish.price,
+          type: type, // 'ready' or 'kit'
+          calories: dish.calories,
+          protein: dish.protein,
+          qty: 1
+        });
+      }
+      saveState();
+      renderCartDrawer();
+      showToast(`Added ${dish.name} (${type === 'kit' ? '9-Min Fresh Kit' : 'Ready-to-Eat'}) to cart!`);
+    }
+
+    function modifyCartQty(cartId, delta) {
+      const idx = appState.cart.findIndex(i => i.cartId === cartId);
+      if (idx !== -1) {
+        appState.cart[idx].qty += delta;
+        if (appState.cart[idx].qty <= 0) {
+          appState.cart.splice(idx, 1);
+        }
+      }
+      saveState();
+      renderCartDrawer();
+    }
+
+    function updateCartBadge() {
+      const count = appState.cart.reduce((sum, item) => sum + item.qty, 0);
+      const el = document.getElementById('headerCartCount');
+      if (el) el.innerText = count;
+    }
+
+    function toggleCartDrawer() {
+      const drawer = document.getElementById('cartDrawer');
+      const backdrop = document.getElementById('cartDrawerBackdrop');
+      if (drawer.classList.contains('translate-x-full')) {
+        drawer.classList.remove('translate-x-full');
+        backdrop.classList.remove('hidden');
+        renderCartDrawer();
+      } else {
+        drawer.classList.add('translate-x-full');
+        backdrop.classList.add('hidden');
+      }
+    }
+
+    function renderCartDrawer() {
+      const list = document.getElementById('cartItemsList');
+      if (!list) return;
+
+      if (appState.cart.length === 0) {
+        list.innerHTML = `
+          <div class="text-center py-12 text-slate-400">
+            <div class="text-4xl mb-2">🥗</div>
+            <p class="font-bold text-obsidian text-sm">Your basket is empty</p>
+            <p class="text-xs text-slate-500 mt-1">Explore our ready-to-eat kitchen or 9-minute fresh prep kits.</p>
+          </div>
+        `;
+        document.getElementById('cartSubtotal').innerText = '₹0';
+        document.getElementById('cartTotal').innerText = '₹0';
+        return;
+      }
+
+      let subtotal = 0;
+      list.innerHTML = appState.cart.map(item => {
+        const itemTotal = item.price * item.qty;
+        subtotal += itemTotal;
+        return `
+          <div class="flex items-center justify-between p-3 rounded-2xl border border-slateBorder bg-white shadow-stripe-sm">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">${item.emoji}</span>
+              <div>
+                <h4 class="font-bold text-obsidian text-xs leading-tight line-clamp-1">${item.name}</h4>
+                <div class="flex items-center gap-2 mt-0.5">
+                  <span class="text-[10px] font-bold ${item.type === 'kit' ? 'text-freshTealDark bg-freshTeal/10' : 'text-royalIndigo bg-royalIndigo/10'} px-1.5 py-0.5 rounded">
+                    ${item.type === 'kit' ? '9-Min Kit' : 'Ready 20-Min'}
+                  </span>
+                  <span class="text-[10px] text-slate-500">${item.calories} kcal • ${item.protein}g P</span>
+                </div>
+                <div class="font-extrabold text-obsidian text-xs mt-1">₹${item.price} each</div>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <button onclick="modifyCartQty('${item.cartId}', -1)" class="w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 text-obsidian font-bold text-xs flex items-center justify-center">-</button>
+              <span class="text-xs font-bold text-obsidian w-4 text-center">${item.qty}</span>
+              <button onclick="modifyCartQty('${item.cartId}', 1)" class="w-6 h-6 rounded-lg bg-royalIndigo hover:bg-royalIndigoDark text-white font-bold text-xs flex items-center justify-center">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('cartSubtotal').innerText = `₹${subtotal}`;
+      document.getElementById('cartTotal').innerText = `₹${subtotal}`;
+    }
+
+    function goToCheckout() {
+      if (appState.cart.length === 0) {
+        showToast('Please add meals to your cart first!', 'error');
+        return;
+      }
+      toggleCartDrawer();
+      router.navigate('checkout');
+    }
+
+    // --- 5. NUTRITION ENGINE (MIFFLIN-ST JEOR FORMULAS) ---
+    function computeNutritionProfile(data) {
+      // Mifflin-St Jeor formula
+      const weight = parseFloat(data.weight);
+      const height = parseFloat(data.height);
+      const age = parseInt(data.age);
+      const isMale = data.sex === 'male';
+
+      let bmr = isMale
+        ? (10 * weight) + (6.25 * height) - (5 * age) + 5
+        : (10 * weight) + (6.25 * height) - (5 * age) - 161;
+
+      const multipliers = {
+        sedentary: 1.2,
+        lightly_active: 1.375,
+        moderately_active: 1.55,
+        very_active: 1.725,
+        extra_active: 1.9
+      };
+
+      const tdee = Math.round(bmr * (multipliers[data.activity] || 1.375));
+
+      const goalDeltas = {
+        fat_loss: -500,
+        muscle_gain: 300,
+        recomposition: 0,
+        maintenance: 0
+      };
+
+      const targetCalories = Math.max(1200, tdee + (goalDeltas[data.goal] || 0));
+
+      // Protein targets per kg based on goal
+      const proteinRates = {
+        fat_loss: 2.0,      // higher protein to spare muscle
+        muscle_gain: 2.0,
+        recomposition: 2.2,
+        maintenance: 1.6
+      };
+      const proteinG = Math.round(weight * (proteinRates[data.goal] || 1.8));
+      const fatG = Math.round((targetCalories * 0.25) / 9); // 25% cals from fat
+      const carbCals = targetCalories - (proteinG * 4) - (fatG * 9);
+      const carbsG = Math.max(50, Math.round(carbCals / 4));
+
+      return {
+        bmr: Math.round(bmr),
+        tdee: tdee,
+        targetCalories: targetCalories,
+        proteinG: proteinG,
+        carbsG: carbsG,
+        fatG: fatG
+      };
+    }
+
+    // --- 6. 7-DAY MEAL PLAN GENERATOR ---
+    function build7DayMealPlan(dietStyle, region) {
+      const allDishes = getAllDishes();
+      const breakfasts = allDishes.filter(d => d.type === 'breakfast');
+      const lunches = allDishes.filter(d => d.type === 'lunch');
+      const dinners = allDishes.filter(d => d.type === 'dinner');
+
+      const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      const plan = {};
+
+      days.forEach((day, index) => {
+        plan[day] = {
+          breakfast: breakfasts[index % breakfasts.length] || breakfasts[0],
+          lunch: lunches[index % lunches.length] || lunches[0],
+          dinner: dinners[index % dinners.length] || dinners[0],
+        };
+      });
+      return plan;
+    }
+
+    // --- 7. ROUTING CONTROLLER ---
+    const router = {
+      currentPage: 'landing',
+      navigate(page) {
+        this.currentPage = page;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Update nav styling
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+          if (tab.dataset.page === page) {
+            tab.className = 'nav-tab px-3.5 py-1.5 rounded-lg bg-white/20 text-white font-bold text-xs tracking-wide shadow-sm';
+          } else {
+            tab.className = 'nav-tab px-3.5 py-1.5 rounded-lg text-slate-300 hover:text-white font-medium text-xs tracking-wide';
+          }
+        });
+
+        this.renderHeaderAuth();
+        const root = document.getElementById('appRoot');
+
+        switch (page) {
+          case 'landing':
+            root.innerHTML = renderLandingPage();
+            initLandingWidgets();
+            break;
+          case 'login':
+            root.innerHTML = renderLoginPage();
+            break;
+          case 'register':
+            root.innerHTML = renderRegisterPage();
+            break;
+          case 'onboarding':
+            root.innerHTML = renderOnboardingPage();
+            initOnboardingWizard();
+            break;
+          case 'dashboard':
+            if (!appState.currentUser) {
+              showToast('Please sign in or start a demo session first!', 'error');
+              router.navigate('login');
+              return;
+            }
+            if (!appState.profile) {
+              router.navigate('onboarding');
+              return;
+            }
+            root.innerHTML = renderDashboardPage();
+            initDashboardRings();
+            break;
+          case 'store':
+            root.innerHTML = renderStorePage();
+            break;
+          case 'checkout':
+            root.innerHTML = renderCheckoutPage();
+            initCheckoutPage();
+            break;
+          case 'order':
+            root.innerHTML = renderOrderPage();
+            initOrderCountdown();
+            break;
+          default:
+            root.innerHTML = renderLandingPage();
+        }
+      },
+
+      renderHeaderAuth() {
+        const el = document.getElementById('authActions');
+        if (!el) return;
+        if (appState.currentUser) {
+          el.innerHTML = `
+            <div class="flex items-center gap-2">
+              <div onclick="router.navigate('dashboard')" class="cursor-pointer flex items-center gap-2 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-xl border border-white/15 transition">
+                <span class="w-6 h-6 rounded-full bg-freshTeal text-obsidian flex items-center justify-center font-bold text-xs">
+                  ${appState.currentUser.name.charAt(0)}
+                </span>
+                <span class="text-xs font-semibold text-white hidden sm:inline">${appState.currentUser.name}</span>
+              </div>
+              <button onclick="handleLogout()" title="Logout" class="p-2 text-slate-400 hover:text-warmCoral rounded-lg transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+              </button>
+            </div>
+          `;
+        } else {
+          el.innerHTML = `
+            <button onclick="router.navigate('login')" class="px-3.5 py-1.5 text-xs font-bold text-slate-300 hover:text-white transition">Sign In</button>
+            <button onclick="router.navigate('register')" class="px-4 py-2 text-xs font-bold text-obsidian bg-freshTeal hover:bg-freshTealDark rounded-xl shadow-md transition">Start Free</button>
+          `;
+        }
+      }
+    };
+
+    function handleLogout() {
+      appState.currentUser = null;
+      saveState();
+      showToast('You have been logged out.');
+      router.navigate('landing');
+    }
+
+    // --- 8. PAGE RENDERERS ---
+
+    // ==========================================
+    // PAGE 1: STRIPE-STYLE LANDING PAGE
+    // ==========================================
+    function renderLandingPage() {
+      return `
+        <!-- HERO SECTION WITH MESH GRADIENT -->
+        <section class="mesh-gradient-stripe text-white pt-16 pb-24 px-4 sm:px-6 relative">
+          <div class="max-w-7xl mx-auto grid lg:grid-cols-12 gap-12 items-center relative z-10">
+            
+            <!-- Left Copy Column -->
+            <div class="lg:col-span-7 space-y-6">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold text-freshTeal">
+                <span class="w-2 h-2 rounded-full bg-freshTeal animate-ping"></span>
+                Built for Indian Metabolism & Regional Kitchens
+              </div>
+              
+              <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight font-display leading-[1.1]">
+                Adaptive Indian Nutrition.<br>
+                <span class="bg-gradient-to-r from-freshTeal via-[#7B74FF] to-warmCoral bg-clip-text text-transparent">
+                  Precision Macros Delivered.
+                </span>
+              </h1>
+
+              <p class="text-slate-300 text-base sm:text-lg max-w-xl leading-relaxed">
+                Tired of Western diet plans demanding broccoli and bland chicken? MacroMint calculates your exact Mifflin-St Jeor TDEE and serves delicious <strong>Ragi Dosas, Paneer Tikka Bowls & Dal Tadka</strong> tailored to your body's daily deficit.
+              </p>
+
+              <div class="flex flex-wrap items-center gap-4 pt-2">
+                <button onclick="router.navigate('register')" class="px-8 py-4 bg-freshTeal hover:bg-freshTealDark text-obsidian font-extrabold text-sm rounded-2xl shadow-stripe transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                  Start Free Assessment <span>→</span>
+                </button>
+                <button onclick="startDemoSession()" class="px-7 py-4 bg-white/10 hover:bg-white/20 text-white font-bold text-sm rounded-2xl border border-white/20 transition flex items-center gap-2">
+                  ⚡ Continue with Demo Account
+                </button>
+              </div>
+
+              <!-- Trust Metrics -->
+              <div class="grid grid-cols-3 gap-4 pt-6 border-t border-white/10 max-w-md text-xs">
+                <div>
+                  <div class="text-xl font-bold font-display text-white">100%</div>
+                  <div class="text-slate-400 mt-0.5">Authentic Indian Dishes</div>
+                </div>
+                <div>
+                  <div class="text-xl font-bold font-display text-freshTeal">9-20 min</div>
+                  <div class="text-slate-400 mt-0.5">Cloud Kitchen Express</div>
+                </div>
+                <div>
+                  <div class="text-xl font-bold font-display text-warmCoral">±5%</div>
+                  <div class="text-slate-400 mt-0.5">Mifflin-St Jeor Precision</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Visual / Floating Hero Card -->
+            <div class="lg:col-span-5 relative">
+              <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-stripe-lg text-white space-y-4">
+                <div class="flex justify-between items-center border-b border-white/10 pb-4">
+                  <div>
+                    <span class="text-xs text-freshTeal uppercase tracking-wider font-bold">Live Calorie Target</span>
+                    <h3 class="text-2xl font-extrabold font-display">1,850 kcal</h3>
+                  </div>
+                  <span class="px-3 py-1 bg-warmCoral/20 border border-warmCoral/40 text-warmCoral rounded-full text-xs font-bold">Fat Loss Pace (-500)</span>
+                </div>
+
+                <!-- Floating Meal Preview Cards -->
+                <div class="space-y-3">
+                  <div class="bg-white/15 p-3.5 rounded-2xl border border-white/15 flex items-center justify-between card-spring">
+                    <div class="flex items-center gap-3">
+                      <span class="text-3xl">🫓</span>
+                      <div>
+                        <div class="font-bold text-xs">Crispy Ragi Dosa & Chutney</div>
+                        <div class="text-[10px] text-slate-300">Breakfast • 285 kcal • 9g Protein</div>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <div class="font-bold text-freshTeal text-xs">₹95</div>
+                      <div class="text-[10px] text-slate-400">9-min kit</div>
+                    </div>
+                  </div>
+
+                  <div class="bg-white/15 p-3.5 rounded-2xl border border-white/15 flex items-center justify-between card-spring">
+                    <div class="flex items-center gap-3">
+                      <span class="text-3xl">🥗</span>
+                      <div>
+                        <div class="font-bold text-xs">Paneer Tikka Millet Power Bowl</div>
+                        <div class="text-[10px] text-slate-300">Lunch • 420 kcal • 28g Protein</div>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <div class="font-bold text-freshTeal text-xs">₹185</div>
+                      <div class="text-[10px] text-slate-400">Ready in 20m</div>
+                    </div>
+                  </div>
+
+                  <div class="bg-white/15 p-3.5 rounded-2xl border border-white/15 flex items-center justify-between card-spring">
+                    <div class="flex items-center gap-3">
+                      <span class="text-3xl">🫕</span>
+                      <div>
+                        <div class="font-bold text-xs">Dal Tadka & 3 Phulka Set</div>
+                        <div class="text-[10px] text-slate-300">Dinner • 380 kcal • 16g Protein</div>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <div class="font-bold text-freshTeal text-xs">₹120</div>
+                      <div class="text-[10px] text-slate-400">Ready in 15m</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-2 flex items-center justify-between text-xs text-slate-300 border-t border-white/10">
+                  <span>Daily Protein Met: <strong class="text-freshTeal">135g / 140g</strong></span>
+                  <span class="text-freshTeal font-bold">96% Accuracy</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SECTION 2: HOW ADAPTIVE NUTRITION WORKS -->
+        <section class="py-20 px-4 sm:px-6 bg-white border-b border-slateBorder">
+          <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+              <span class="text-xs uppercase font-extrabold tracking-widest text-royalIndigo">The Indian Metabolic Algorithm</span>
+              <h2 class="text-3xl sm:text-4xl font-extrabold font-display text-obsidian mt-2">How Adaptive Nutrition Works</h2>
+              <p class="text-slate-500 text-sm mt-3 leading-relaxed">
+                Indian household diets are high in complex carbohydrates and lentils. We dynamically balance your amino acid profile and glycemic load without forcing you to abandon roti or dal.
+              </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+              <!-- Step 1 -->
+              <div class="p-8 rounded-3xl bg-canvas border border-slateBorder card-spring space-y-4">
+                <div class="w-12 h-12 rounded-2xl bg-royalIndigo/10 text-royalIndigo flex items-center justify-center font-display font-extrabold text-xl">
+                  01
+                </div>
+                <h3 class="text-lg font-bold text-obsidian">Scientific BMR & TDEE Calibration</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                  We use the Mifflin-St Jeor formula to determine your basal metabolic baseline, factoring in biological sex, height, age, and activity coefficients.
+                </p>
+                <div class="p-3 bg-white rounded-xl border border-slateBorder text-[11px] font-mono text-royalIndigo">
+                  BMR = 10×W(kg) + 6.25×H(cm) - 5×A ± S
+                </div>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="p-8 rounded-3xl bg-canvas border border-slateBorder card-spring space-y-4">
+                <div class="w-12 h-12 rounded-2xl bg-freshTeal/20 text-freshTealDark flex items-center justify-center font-display font-extrabold text-xl">
+                  02
+                </div>
+                <h3 class="text-lg font-bold text-obsidian">Dynamic Regional Diet Mapping</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                  Whether South Indian (ragi/dosa/sambar) or North Indian (paneer/dal/phulka), our engine pairs complementary plant and animal proteins for optimal bioavailability.
+                </p>
+                <div class="p-3 bg-white rounded-xl border border-slateBorder text-[11px] font-mono text-freshTealDark">
+                  Targets: Protein (2.0g/kg) • Fat (25%)
+                </div>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="p-8 rounded-3xl bg-canvas border border-slateBorder card-spring space-y-4">
+                <div class="w-12 h-12 rounded-2xl bg-warmCoral/15 text-warmCoral flex items-center justify-center font-display font-extrabold text-xl">
+                  03
+                </div>
+                <h3 class="text-lg font-bold text-obsidian">10-Min Kit & Cloud Kitchen Dispatch</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                  Don't want to weigh food? Order pre-portioned 9-min raw ingredient kits or 20-min cooked meals prepared by HACCP-certified cloud kitchens.
+                </p>
+                <div class="p-3 bg-white rounded-xl border border-slateBorder text-[11px] font-mono text-warmCoral">
+                  Ready in 20 min • Zero food waste
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 3: 10-MINUTE FRESH KIT & CLOUD KITCHEN CAROUSEL -->
+        <section class="py-20 px-4 sm:px-6 bg-canvas border-b border-slateBorder">
+          <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+              <div>
+                <span class="text-xs uppercase font-extrabold tracking-widest text-freshTealDark">Daily Cloud Kitchen Roster</span>
+                <h2 class="text-3xl font-extrabold font-display text-obsidian mt-1">Authentic Macro-Engineered Dishes</h2>
+                <p class="text-slate-500 text-xs sm:text-sm mt-1">Cook at home in 9 minutes or order piping hot in 20 minutes.</p>
+              </div>
+              <button onclick="router.navigate('store')" class="mt-4 md:mt-0 text-royalIndigo font-bold text-xs sm:text-sm hover:underline flex items-center gap-1">
+                Explore Full Kitchen Menu <span>→</span>
+              </button>
+            </div>
+
+            <!-- Dishes Grid -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              ${DEFAULT_DISHES.slice(0, 4).map(dish => `
+                <div class="bg-white rounded-3xl border border-slateBorder p-5 shadow-stripe-sm card-spring flex flex-col justify-between">
+                  <div>
+                    <div class="text-4xl mb-3">${dish.emoji}</div>
+                    <div class="flex items-center gap-2 mb-2">
+                      <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-royalIndigo/10 text-royalIndigo">${dish.category}</span>
+                      <span class="text-[10px] font-bold text-slate-500">${dish.prepMins} mins</span>
+                    </div>
+                    <h4 class="font-bold text-obsidian text-sm line-clamp-1">${dish.name}</h4>
+                    <p class="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">${dish.desc}</p>
+                    
+                    <!-- Macro pills -->
+                    <div class="grid grid-cols-3 gap-2 my-4 text-center">
+                      <div class="p-2 rounded-xl bg-slate-50 border border-slateBorder">
+                        <span class="text-[10px] text-slate-400 block">Calories</span>
+                        <strong class="text-xs text-obsidian">${dish.calories}</strong>
+                      </div>
+                      <div class="p-2 rounded-xl bg-slate-50 border border-slateBorder">
+                        <span class="text-[10px] text-slate-400 block">Protein</span>
+                        <strong class="text-xs text-royalIndigo">${dish.protein}g</strong>
+                      </div>
+                      <div class="p-2 rounded-xl bg-slate-50 border border-slateBorder">
+                        <span class="text-[10px] text-slate-400 block">Carbs</span>
+                        <strong class="text-xs text-slate-700">${dish.carbs}g</strong>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="pt-3 border-t border-slateBorder flex items-center justify-between">
+                    <div>
+                      <span class="text-[10px] text-slate-400">From</span>
+                      <div class="text-base font-extrabold text-obsidian">₹${dish.price}</div>
+                    </div>
+                    <div class="flex gap-1.5">
+                      <button onclick="addToCart('${dish.id}', 'kit')" class="px-2.5 py-1.5 rounded-xl border border-slateBorder hover:border-freshTeal text-[10px] font-bold text-obsidian transition">
+                        Kit (9m)
+                      </button>
+                      <button onclick="addToCart('${dish.id}', 'ready')" class="px-3 py-1.5 rounded-xl bg-royalIndigo hover:bg-royalIndigoDark text-[10px] font-bold text-white transition shadow-sm">
+                        Ready (20m)
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 4: INTERACTIVE LIVE BMR PREVIEW WIDGET -->
+        <section class="py-20 px-4 sm:px-6 bg-white border-b border-slateBorder">
+          <div class="max-w-5xl mx-auto bg-gradient-to-br from-obsidian via-[#112a4a] to-obsidian text-white rounded-3xl p-8 sm:p-12 shadow-stripe-lg relative overflow-hidden">
+            
+            <div class="max-w-xl mb-8">
+              <span class="text-xs uppercase font-extrabold tracking-widest text-freshTeal">Instant Mathematical Test</span>
+              <h2 class="text-3xl font-extrabold font-display mt-1">Live Indian BMR & Calorie Simulator</h2>
+              <p class="text-slate-300 text-xs sm:text-sm mt-2 leading-relaxed">
+                Test your numbers right now. Slide the controls below to watch how Mifflin-St Jeor TDEE shifts instantly.
+              </p>
+            </div>
+
+            <div class="grid lg:grid-cols-12 gap-8 items-center">
+              
+              <!-- Sliders Column -->
+              <div class="lg:col-span-7 space-y-4">
+                <!-- Sex Selection -->
+                <div class="flex gap-3">
+                  <button id="bmrSexMale" onclick="updateBmrPreviewSex('male')" class="flex-1 py-2 rounded-xl text-xs font-bold border border-white/20 bg-white/20 text-white transition">
+                    ♂ Male (+5)
+                  </button>
+                  <button id="bmrSexFemale" onclick="updateBmrPreviewSex('female')" class="flex-1 py-2 rounded-xl text-xs font-bold border border-white/20 bg-transparent text-slate-300 hover:text-white transition">
+                    ♀ Female (-161)
+                  </button>
+                </div>
+
+                <!-- Weight Slider -->
+                <div>
+                  <div class="flex justify-between text-xs mb-1">
+                    <span class="text-slate-300">Weight</span>
+                    <span class="font-bold text-freshTeal" id="bmrWeightLabel">70 kg</span>
+                  </div>
+                  <input type="range" id="bmrWeightInput" min="40" max="130" value="70" class="w-full accent-freshTeal" oninput="calculateBmrLiveWidget()">
+                </div>
+
+                <!-- Height Slider -->
+                <div>
+                  <div class="flex justify-between text-xs mb-1">
+                    <span class="text-slate-300">Height</span>
+                    <span class="font-bold text-freshTeal" id="bmrHeightLabel">172 cm</span>
+                  </div>
+                  <input type="range" id="bmrHeightInput" min="140" max="205" value="172" class="w-full accent-freshTeal" oninput="calculateBmrLiveWidget()">
+                </div>
+
+                <!-- Age Slider -->
+                <div>
+                  <div class="flex justify-between text-xs mb-1">
+                    <span class="text-slate-300">Age</span>
+                    <span class="font-bold text-freshTeal" id="bmrAgeLabel">28 yrs</span>
+                  </div>
+                  <input type="range" id="bmrAgeInput" min="18" max="70" value="28" class="w-full accent-freshTeal" oninput="calculateBmrLiveWidget()">
+                </div>
+
+                <!-- Activity Level -->
+                <div>
+                  <div class="flex justify-between text-xs mb-1">
+                    <span class="text-slate-300">Activity Level</span>
+                  </div>
+                  <select id="bmrActivityInput" class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-xl text-xs text-white" onchange="calculateBmrLiveWidget()">
+                    <option value="1.2" class="text-obsidian">Sedentary (Desk Job)</option>
+                    <option value="1.375" selected class="text-obsidian">Light Activity (1-3 gym/walk)</option>
+                    <option value="1.55" class="text-obsidian">Moderate (3-5 sessions)</option>
+                    <option value="1.725" class="text-obsidian">Heavy Workout (6-7 days)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Output Display Column -->
+              <div class="lg:col-span-5 bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 text-center space-y-4">
+                <div>
+                  <div class="text-[11px] text-slate-300 uppercase tracking-widest">Basal Metabolic Rate</div>
+                  <div class="text-3xl font-extrabold font-display text-white mt-1" id="bmrLiveOutput">1,640 kcal</div>
+                  <div class="text-[10px] text-slate-400">Calories burned doing nothing</div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 pt-3 border-t border-white/15">
+                  <div class="p-3 bg-white/10 rounded-xl">
+                    <span class="text-[10px] text-freshTeal uppercase tracking-wider block">Maintenance TDEE</span>
+                    <span class="text-lg font-bold text-white" id="tdeeLiveOutput">2,255 kcal</span>
+                  </div>
+                  <div class="p-3 bg-warmCoral/20 border border-warmCoral/30 rounded-xl">
+                    <span class="text-[10px] text-warmCoral uppercase tracking-wider block">Fat Loss (-500)</span>
+                    <span class="text-lg font-bold text-white" id="deficitLiveOutput">1,755 kcal</span>
+                  </div>
+                </div>
+
+                <button onclick="router.navigate('onboarding')" class="w-full py-3 bg-freshTeal hover:bg-freshTealDark text-obsidian font-extrabold text-xs rounded-xl shadow-md transition">
+                  Lock My 7-Day Plan with These Numbers →
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 5: PRICING TIERS & FOOTER -->
+        <section class="py-20 px-4 sm:px-6 bg-canvas">
+          <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-xl mx-auto mb-14">
+              <span class="text-xs uppercase font-extrabold tracking-widest text-royalIndigo">Flexible Subscriptions</span>
+              <h2 class="text-3xl font-extrabold font-display text-obsidian mt-1">Simple, Transparent Pricing</h2>
+              <p class="text-slate-500 text-xs sm:text-sm mt-2">Zero hidden fees. Pause or cancel your cloud meal subscription anytime.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+              <!-- Tier 1: Pay Per Meal -->
+              <div class="p-8 rounded-3xl bg-white border border-slateBorder shadow-stripe-sm card-spring flex flex-col justify-between">
+                <div>
+                  <h4 class="font-bold text-obsidian text-base">Pay-Per-Meal</h4>
+                  <p class="text-xs text-slate-500 mt-1">Order on-demand whenever hunger strikes.</p>
+                  <div class="my-6">
+                    <span class="text-3xl font-extrabold font-display text-obsidian">₹85</span>
+                    <span class="text-xs text-slate-400">/ starting meal</span>
+                  </div>
+                  <ul class="space-y-3 text-xs text-slate-600">
+                    <li class="flex items-center gap-2">✓ 10-Minute Fresh Kits</li>
+                    <li class="flex items-center gap-2">✓ 20-Minute Cloud Delivery</li>
+                    <li class="flex items-center gap-2">✓ No monthly commitment</li>
+                    <li class="flex items-center gap-2">✓ Free Macro Tracking App</li>
+                  </ul>
+                </div>
+                <button onclick="router.navigate('store')" class="mt-8 w-full py-3 border border-slateBorder hover:border-royalIndigo text-obsidian font-bold text-xs rounded-xl transition">
+                  Browse Kitchen Menu
+                </button>
+              </div>
+
+              <!-- Tier 2: Monthly Pro (Popular) -->
+              <div class="p-8 rounded-3xl bg-gradient-to-b from-obsidian to-[#112338] text-white border-2 border-royalIndigo shadow-stripe-lg card-spring relative flex flex-col justify-between">
+                <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-royalIndigo text-white text-[10px] uppercase font-extrabold px-3 py-1 rounded-full tracking-wider shadow">
+                  Most Popular
+                </span>
+                <div>
+                  <h4 class="font-bold text-white text-base">Monthly Pro Adaptive</h4>
+                  <p class="text-xs text-slate-300 mt-1">Full 7-day adaptive nutrition & kitchen dispatch.</p>
+                  <div class="my-6">
+                    <span class="text-3xl font-extrabold font-display text-freshTeal">₹4,999</span>
+                    <span class="text-xs text-slate-300">/ month (2 meals/day)</span>
+                  </div>
+                  <ul class="space-y-3 text-xs text-slate-300">
+                    <li class="flex items-center gap-2">✓ 60 Prepared Meals or Kits / mo</li>
+                    <li class="flex items-center gap-2">✓ Weekly AI Body Metric Rebalancing</li>
+                    <li class="flex items-center gap-2">✓ Unlimited Meal Swaps</li>
+                    <li class="flex items-center gap-2">✓ Dedicated Nutritionist WhatsApp Line</li>
+                  </ul>
+                </div>
+                <button onclick="router.navigate('register')" class="mt-8 w-full py-3.5 bg-royalIndigo hover:bg-royalIndigoDark text-white font-extrabold text-xs rounded-xl shadow-lg shadow-royalIndigo/40 transition">
+                  Start 7-Day Free Trial
+                </button>
+              </div>
+
+              <!-- Tier 3: Macro AI App Only -->
+              <div class="p-8 rounded-3xl bg-white border border-slateBorder shadow-stripe-sm card-spring flex flex-col justify-between">
+                <div>
+                  <h4 class="font-bold text-obsidian text-base">MacroMint OS (Self-Cook)</h4>
+                  <p class="text-xs text-slate-500 mt-1">For those who love cooking their own Indian meals.</p>
+                  <div class="my-6">
+                    <span class="text-3xl font-extrabold font-display text-obsidian">₹499</span>
+                    <span class="text-xs text-slate-400">/ month</span>
+                  </div>
+                  <ul class="space-y-3 text-xs text-slate-600">
+                    <li class="flex items-center gap-2">✓ Adaptive 7-Day Indian Meal Generator</li>
+                    <li class="flex items-center gap-2">✓ Gram-level Grocery Lists</li>
+                    <li class="flex items-center gap-2">✓ Full Macro Equalizer Swap Engine</li>
+                    <li class="flex items-center gap-2">✓ 24/7 AI Nutrition Chatbot</li>
+                  </ul>
+                </div>
+                <button onclick="router.navigate('onboarding')" class="mt-8 w-full py-3 border border-slateBorder hover:border-royalIndigo text-obsidian font-bold text-xs rounded-xl transition">
+                  Create Diet Plan Free
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="bg-obsidian text-slate-400 py-12 px-4 sm:px-6 border-t border-white/10 text-xs">
+          <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-2 text-white">
+              <span class="w-6 h-6 rounded-lg bg-royalIndigo flex items-center justify-center font-bold text-xs">M</span>
+              <span class="font-bold text-sm">MacroMint Technologies India Pvt Ltd</span>
+            </div>
+            <div class="flex gap-6">
+              <a href="#" class="hover:text-white">Privacy Policy</a>
+              <a href="#" class="hover:text-white">FSSAI License #10022022000491</a>
+              <a href="#" class="hover:text-white">Cloud Kitchen Compliance</a>
+              <a href="#" class="hover:text-white">Bangalore • Mumbai • Delhi</a>
+            </div>
+          </div>
+        </footer>
+      `;
+    }
+
+    let bmrPreviewSex = 'male';
+    function updateBmrPreviewSex(sex) {
+      bmrPreviewSex = sex;
+      const maleBtn = document.getElementById('bmrSexMale');
+      const femaleBtn = document.getElementById('bmrSexFemale');
+      if (sex === 'male') {
+        maleBtn.className = "flex-1 py-2 rounded-xl text-xs font-bold border border-white/20 bg-white/20 text-white transition";
+        femaleBtn.className = "flex-1 py-2 rounded-xl text-xs font-bold border border-white/20 bg-transparent text-slate-300 hover:text-white transition";
+      } else {
+        femaleBtn.className = "flex-1 py-2 rounded-xl text-xs font-bold border border-white/20 bg-white/20 text-white transition";
+        maleBtn.className = "flex-1 py-2 rounded-xl text-xs font-bold border border-white/20 bg-transparent text-slate-300 hover:text-white transition";
+      }
+      calculateBmrLiveWidget();
+    }
+
+    function calculateBmrLiveWidget() {
+      const weight = parseFloat(document.getElementById('bmrWeightInput').value);
+      const height = parseFloat(document.getElementById('bmrHeightInput').value);
+      const age = parseInt(document.getElementById('bmrAgeInput').value);
+      const activity = parseFloat(document.getElementById('bmrActivityInput').value);
+
+      document.getElementById('bmrWeightLabel').innerText = `${weight} kg`;
+      document.getElementById('bmrHeightLabel').innerText = `${height} cm`;
+      document.getElementById('bmrAgeLabel').innerText = `${age} yrs`;
+
+      const bmr = bmrPreviewSex === 'male'
+        ? (10 * weight) + (6.25 * height) - (5 * age) + 5
+        : (10 * weight) + (6.25 * height) - (5 * age) - 161;
+
+      const tdee = Math.round(bmr * activity);
+      const deficit = tdee - 500;
+
+      document.getElementById('bmrLiveOutput').innerText = `${Math.round(bmr)} kcal`;
+      document.getElementById('tdeeLiveOutput').innerText = `${tdee} kcal`;
+      document.getElementById('deficitLiveOutput').innerText = `${deficit} kcal`;
+    }
+
+    function initLandingWidgets() {
+      calculateBmrLiveWidget();
+    }
+
+    // ==========================================
+    // PAGE 2: LOGIN & REGISTER
+    // ==========================================
+    function renderLoginPage() {
+      return `
+        <div class="min-h-[85vh] flex items-center justify-center p-4 bg-canvas">
+          <div class="bg-white rounded-3xl border border-slateBorder p-8 max-w-md w-full shadow-stripe-lg">
+            <div class="text-center mb-6">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-royalIndigo to-freshTeal flex items-center justify-center text-white font-black text-xl mx-auto shadow-md">M</div>
+              <h2 class="text-2xl font-bold font-display text-obsidian mt-3">Welcome Back</h2>
+              <p class="text-xs text-slate-500 mt-1">Access your saved adaptive meal logs and targets</p>
+            </div>
+
+            <form onsubmit="handleLoginSubmit(event)" class="space-y-4 text-xs">
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Email Address</label>
+                <input type="email" id="loginEmail" required placeholder="rahul@example.com" class="w-full px-3.5 py-2.5 border border-slateBorder rounded-xl text-sm focus:border-royalIndigo outline-none">
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Password</label>
+                <input type="password" id="loginPass" required placeholder="••••••••" class="w-full px-3.5 py-2.5 border border-slateBorder rounded-xl text-sm focus:border-royalIndigo outline-none">
+              </div>
+              <button type="submit" class="w-full py-3.5 bg-royalIndigo hover:bg-royalIndigoDark text-white font-bold rounded-xl shadow-md transition text-xs">
+                Sign In to Dashboard
+              </button>
+            </form>
+
+            <div class="relative my-6 text-center">
+              <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slateBorder"></div></div>
+              <span class="relative px-3 bg-white text-[11px] text-slate-400 font-semibold uppercase">Or Instant Access</span>
+            </div>
+
+            <button onclick="startDemoSession()" class="w-full py-3 bg-slate-50 hover:bg-slate-100 border border-slateBorder text-obsidian font-bold rounded-xl transition text-xs flex items-center justify-center gap-2">
+              ⚡ Continue with Demo Account (Instant)
+            </button>
+
+            <p class="text-center text-xs text-slate-500 mt-6">
+              Don't have an account? <a href="javascript:void(0)" onclick="router.navigate('register')" class="text-royalIndigo font-bold hover:underline">Create one</a>
+            </p>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderRegisterPage() {
+      return `
+        <div class="min-h-[85vh] flex items-center justify-center p-4 bg-canvas">
+          <div class="bg-white rounded-3xl border border-slateBorder p-8 max-w-md w-full shadow-stripe-lg">
+            <div class="text-center mb-6">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-royalIndigo to-freshTeal flex items-center justify-center text-white font-black text-xl mx-auto shadow-md">M</div>
+              <h2 class="text-2xl font-bold font-display text-obsidian mt-3">Create Free Account</h2>
+              <p class="text-xs text-slate-500 mt-1">Start your 100% personalized Indian diet plan</p>
+            </div>
+
+            <form onsubmit="handleRegisterSubmit(event)" class="space-y-4 text-xs">
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Full Name</label>
+                <input type="text" id="regName" required placeholder="Aarav Sharma" class="w-full px-3.5 py-2.5 border border-slateBorder rounded-xl text-sm focus:border-royalIndigo outline-none">
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Email Address</label>
+                <input type="email" id="regEmail" required placeholder="aarav@gmail.com" class="w-full px-3.5 py-2.5 border border-slateBorder rounded-xl text-sm focus:border-royalIndigo outline-none">
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Create Password</label>
+                <input type="password" id="regPass" required placeholder="Min 6 characters" minlength="6" class="w-full px-3.5 py-2.5 border border-slateBorder rounded-xl text-sm focus:border-royalIndigo outline-none">
+              </div>
+              <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-royalIndigo to-royalIndigoDark text-white font-bold rounded-xl shadow-md transition text-xs">
+                Create Account & Go to Wizard →
+              </button>
+            </form>
+
+            <div class="relative my-6 text-center">
+              <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slateBorder"></div></div>
+              <span class="relative px-3 bg-white text-[11px] text-slate-400 font-semibold uppercase">Or Instant Access</span>
+            </div>
+
+            <button onclick="startDemoSession()" class="w-full py-3 bg-slate-50 hover:bg-slate-100 border border-slateBorder text-obsidian font-bold rounded-xl transition text-xs flex items-center justify-center gap-2">
+              ⚡ Continue with Demo Account (Instant)
+            </button>
+
+            <p class="text-center text-xs text-slate-500 mt-6">
+              Already registered? <a href="javascript:void(0)" onclick="router.navigate('login')" class="text-royalIndigo font-bold hover:underline">Log in</a>
+            </p>
+          </div>
+        </div>
+      `;
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      appState.currentUser = {
+        name: email.split('@')[0],
+        email: email
+      };
+      saveState();
+      showToast(`Welcome back, ${appState.currentUser.name}!`);
+      if (appState.profile) {
+        router.navigate('dashboard');
+      } else {
+        router.navigate('onboarding');
+      }
+    }
+
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value;
+      const email = document.getElementById('regEmail').value;
+      appState.currentUser = { name, email };
+      saveState();
+      showToast(`Account created for ${name}! Please complete the onboarding wizard.`);
+      router.navigate('onboarding');
+    }
+
+    function startDemoSession() {
+      appState.currentUser = {
+        name: 'Aarav Sharma',
+        email: 'aarav.sharma@demo.in'
+      };
+      // Provide a preset profile for quick testing if desired
+      if (!appState.profile) {
+        appState.profile = {
+          sex: 'male',
+          age: 28,
+          height: 175,
+          weight: 74,
+          activity: 'moderately_active',
+          goal: 'fat_loss',
+          diet: 'veg',
+          region: 'pan_indian',
+          budget: 500,
+          nutrition: computeNutritionProfile({
+            sex: 'male', age: 28, height: 175, weight: 74, activity: 'moderately_active', goal: 'fat_loss'
+          }),
+          mealPlan: build7DayMealPlan('veg', 'pan_indian')
+        };
+      }
+      saveState();
+      showToast(`Logged in as Demo User (${appState.currentUser.name})!`);
+      router.navigate('dashboard');
+    }
+
+    // ==========================================
+    // PAGE 3: BLANK STEP-BY-STEP ONBOARDING WIZARD
+    // ==========================================
+    let wizardStep = 1;
+    let wizardData = {
+      sex: '',
+      age: '',
+      height: '',
+      weight: '',
+      activity: '',
+      goal: '',
+      pace: '0.5',
+      diet: '',
+      region: '',
+      allergies: '',
+      budget: '450'
+    };
+
+    function renderOnboardingPage() {
+      return `
+        <div class="min-h-[85vh] py-12 px-4 sm:px-6 bg-canvas flex items-center justify-center">
+          <div class="bg-white rounded-3xl border border-slateBorder p-6 sm:p-10 max-w-2xl w-full shadow-stripe-lg">
+            
+            <!-- Wizard Progress Stepper -->
+            <div class="mb-8">
+              <div class="flex items-center justify-between text-xs font-bold text-slate-500 mb-2">
+                <span id="stepIndicatorTitle">Step 1 of 4: Biological Basics</span>
+                <span class="text-royalIndigo" id="stepProgressPct">25% Completed</span>
+              </div>
+              <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div id="stepProgressBar" class="h-full bg-gradient-to-r from-royalIndigo to-freshTeal transition-all duration-300" style="width: 25%"></div>
+              </div>
+            </div>
+
+            <!-- STEP 1: BASICS (100% Blank!) -->
+            <div id="wizardStep1" class="wizard-pane space-y-5">
+              <div>
+                <h3 class="text-xl font-bold font-display text-obsidian">Step 1: Physical Parameters</h3>
+                <p class="text-xs text-slate-500 mt-1">Starting 100% blank. We use this strictly for the Mifflin-St Jeor equation.</p>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-2">Biological Sex *</label>
+                <div class="grid grid-cols-2 gap-3">
+                  <button type="button" onclick="selectWizardSex('male')" id="wSexMale" class="p-3.5 rounded-2xl border-2 border-slateBorder hover:border-royalIndigo text-xs font-bold text-obsidian flex items-center justify-center gap-2 transition">
+                    <span>♂</span> Male (+5 constant)
+                  </button>
+                  <button type="button" onclick="selectWizardSex('female')" id="wSexFemale" class="p-3.5 rounded-2xl border-2 border-slateBorder hover:border-royalIndigo text-xs font-bold text-obsidian flex items-center justify-center gap-2 transition">
+                    <span>♀</span> Female (-161 constant)
+                  </button>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Age (Years) *</label>
+                  <input type="number" id="wAge" min="16" max="85" placeholder="e.g. 27" class="w-full px-3.5 py-2.5 border border-slateBorder rounded-xl text-sm font-semibold outline-none focus:border-royalIndigo" oninput="wizardData.age = this.value">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Current Weight (kg) *</label>
+                  <input type="number" id="wWeight" step="0.5" min="35" max="200" placeholder="e.g. 72.5" class="w-full px-3.5 py-2.5 border border-slateBorder rounded-xl text-sm font-semibold outline-none focus:border-royalIndigo" oninput="wizardData.weight = this.value">
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-xs font-bold text-slate-700">Height (cm) *</label>
+                  <span class="text-[10px] text-slate-400">e.g. 5'8" = 173 cm</span>
+                </div>
+                <input type="number" id="wHeight" min="120" max="230" placeholder="e.g. 175" class="w-full px-3.5 py-2.5 border border-slateBorder rounded-xl text-sm font-semibold outline-none focus:border-royalIndigo" oninput="wizardData.height = this.value">
+              </div>
+
+              <div class="pt-4 flex justify-end">
+                <button onclick="advanceWizard(2)" class="px-6 py-3 bg-royalIndigo hover:bg-royalIndigoDark text-white font-bold rounded-xl text-xs shadow-md transition">
+                  Next: Lifestyle & Goal →
+                </button>
+              </div>
+            </div>
+
+            <!-- STEP 2: LIFESTYLE & GOAL -->
+            <div id="wizardStep2" class="wizard-pane space-y-5 hidden">
+              <div>
+                <h3 class="text-xl font-bold font-display text-obsidian">Step 2: Activity & Body Goal</h3>
+                <p class="text-xs text-slate-500 mt-1">Select your realistic weekly routine to adjust energy expenditure multiplier.</p>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-2">Daily Activity Multiplier *</label>
+                <div class="grid sm:grid-cols-2 gap-2.5 text-xs">
+                  ${[
+                    { id: 'sedentary', label: 'Sedentary', desc: 'Desk job, < 4k steps', mult: 'x1.2' },
+                    { id: 'lightly_active', label: 'Lightly Active', desc: '1-3 days gym / 7k steps', mult: 'x1.375' },
+                    { id: 'moderately_active', label: 'Moderately Active', desc: '3-5 intense gym days', mult: 'x1.55' },
+                    { id: 'very_active', label: 'Very Active', desc: '6-7 days heavy training', mult: 'x1.725' },
+                  ].map(act => `
+                    <div onclick="selectWizardActivity('${act.id}')" id="wAct_${act.id}" class="p-3 rounded-2xl border-2 border-slateBorder hover:border-royalIndigo cursor-pointer transition">
+                      <div class="flex justify-between items-center font-bold text-obsidian">
+                        <span>${act.label}</span>
+                        <span class="text-royalIndigo font-mono">${act.mult}</span>
+                      </div>
+                      <p class="text-[11px] text-slate-500 mt-0.5">${act.desc}</p>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-2">Target Goal *</label>
+                <div class="grid grid-cols-2 gap-2.5 text-xs">
+                  <div onclick="selectWizardGoal('fat_loss')" id="wGoal_fat_loss" class="p-3 rounded-2xl border-2 border-slateBorder hover:border-warmCoral cursor-pointer transition">
+                    <div class="font-bold text-warmCoral">Fat Loss</div>
+                    <p class="text-[10px] text-slate-500 mt-0.5">-500 kcal deficit</p>
+                  </div>
+                  <div onclick="selectWizardGoal('muscle_gain')" id="wGoal_muscle_gain" class="p-3 rounded-2xl border-2 border-slateBorder hover:border-freshTeal cursor-pointer transition">
+                    <div class="font-bold text-freshTealDark">Muscle Gain</div>
+                    <p class="text-[10px] text-slate-500 mt-0.5">+300 kcal surplus</p>
+                  </div>
+                  <div onclick="selectWizardGoal('recomposition')" id="wGoal_recomposition" class="p-3 rounded-2xl border-2 border-slateBorder hover:border-royalIndigo cursor-pointer transition">
+                    <div class="font-bold text-royalIndigo">Recomposition</div>
+                    <p class="text-[10px] text-slate-500 mt-0.5">Lose fat & build lean muscle</p>
+                  </div>
+                  <div onclick="selectWizardGoal('maintenance')" id="wGoal_maintenance" class="p-3 rounded-2xl border-2 border-slateBorder hover:border-amberGold cursor-pointer transition">
+                    <div class="font-bold text-amberGold">Maintenance</div>
+                    <p class="text-[10px] text-slate-500 mt-0.5">Energy & weight balance</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-4 flex justify-between">
+                <button onclick="advanceWizard(1)" class="px-5 py-2.5 border border-slateBorder text-slate-600 font-bold rounded-xl text-xs">← Back</button>
+                <button onclick="advanceWizard(3)" class="px-6 py-3 bg-royalIndigo hover:bg-royalIndigoDark text-white font-bold rounded-xl text-xs shadow-md transition">
+                  Next: Cuisine Preferences →
+                </button>
+              </div>
+            </div>
+
+            <!-- STEP 3: PREFERENCES & BUDGET -->
+            <div id="wizardStep3" class="wizard-pane space-y-5 hidden">
+              <div>
+                <h3 class="text-xl font-bold font-display text-obsidian">Step 3: Cuisine & Dietary Rules</h3>
+                <p class="text-xs text-slate-500 mt-1">We filter our 500+ Indian recipe database strictly around your household habits.</p>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-2">Diet Type *</label>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                  ${['veg', 'eggetarian', 'non_veg', 'vegan', 'jain'].map(diet => `
+                    <button type="button" onclick="selectWizardDiet('${diet}')" id="wDiet_${diet}" class="p-2.5 rounded-xl border-2 border-slateBorder hover:border-royalIndigo font-bold text-obsidian capitalize">
+                      ${diet.replace('_', ' ')}
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-2">Regional Preference *</label>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  ${[
+                    { id: 'south_indian', label: 'South Indian (Ragi/Dosa/Idli)' },
+                    { id: 'north_indian', label: 'North Indian (Paneer/Phulka/Dal)' },
+                    { id: 'pan_indian', label: 'Pan-Indian Balanced' },
+                    { id: 'continental', label: 'Continental Healthy' },
+                  ].map(reg => `
+                    <div onclick="selectWizardRegion('${reg.id}')" id="wReg_${reg.id}" class="p-3 rounded-xl border-2 border-slateBorder hover:border-royalIndigo cursor-pointer text-xs font-semibold text-obsidian">
+                      ${reg.label}
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-xs font-bold text-slate-700">Daily Kitchen Budget (₹150 to ₹1,500)</label>
+                  <span id="wBudgetValue" class="text-sm font-bold text-royalIndigo">₹450 / day</span>
+                </div>
+                <input type="range" id="wBudgetInput" min="150" max="1500" step="50" value="450" class="w-full accent-royalIndigo" oninput="wizardData.budget = this.value; document.getElementById('wBudgetValue').innerText = '₹' + this.value + ' / day'">
+              </div>
+
+              <div class="pt-4 flex justify-between">
+                <button onclick="advanceWizard(2)" class="px-5 py-2.5 border border-slateBorder text-slate-600 font-bold rounded-xl text-xs">← Back</button>
+                <button onclick="advanceWizard(4)" class="px-6 py-3 bg-royalIndigo hover:bg-royalIndigoDark text-white font-bold rounded-xl text-xs shadow-md transition">
+                  Calculate Live Scientific Breakdown →
+                </button>
+              </div>
+            </div>
+
+            <!-- STEP 4: LIVE SCIENTIFIC BREAKDOWN -->
+            <div id="wizardStep4" class="wizard-pane space-y-6 hidden">
+              <div class="text-center">
+                <div class="w-12 h-12 rounded-full bg-freshTeal/20 text-freshTealDark text-xl flex items-center justify-center mx-auto mb-2 font-bold">⚡</div>
+                <h3 class="text-2xl font-extrabold font-display text-obsidian">Live Scientific Breakdown</h3>
+                <p class="text-xs text-slate-500 mt-1">Calculated directly via Mifflin-St Jeor formula — Zero static values!</p>
+              </div>
+
+              <!-- Animated Target Highlights -->
+              <div class="grid grid-cols-3 gap-3 text-center">
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slateBorder">
+                  <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Basal BMR</span>
+                  <div class="text-2xl font-extrabold text-obsidian mt-1" id="wOutputBMR">--</div>
+                  <span class="text-[10px] text-slate-500">Resting Base</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-royalIndigo/10 border border-royalIndigo/20">
+                  <span class="text-[10px] text-royalIndigo uppercase font-bold tracking-wider">Total TDEE</span>
+                  <div class="text-2xl font-extrabold text-royalIndigo mt-1" id="wOutputTDEE">--</div>
+                  <span class="text-[10px] text-slate-500">Active Spend</span>
+                </div>
+                <div class="p-4 rounded-2xl bg-freshTeal/15 border border-freshTeal/30">
+                  <span class="text-[10px] text-freshTealDark uppercase font-bold tracking-wider">Target Cals</span>
+                  <div class="text-2xl font-extrabold text-freshTealDark mt-1" id="wOutputTarget">--</div>
+                  <span class="text-[10px] text-slate-500">Goal Intake</span>
+                </div>
+              </div>
+
+              <!-- Macro Split Bars -->
+              <div class="p-5 rounded-2xl bg-canvas border border-slateBorder space-y-3">
+                <h4 class="text-xs font-bold text-obsidian">Daily Macronutrient Targets</h4>
+                
+                <div>
+                  <div class="flex justify-between text-xs font-semibold mb-1">
+                    <span>Protein (Preserves lean muscle)</span>
+                    <span id="wOutputProtein" class="text-royalIndigo font-bold">-- g</span>
+                  </div>
+                  <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-royalIndigo" style="width: 35%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-xs font-semibold mb-1">
+                    <span>Complex Carbs (Clean sustained energy)</span>
+                    <span id="wOutputCarbs" class="text-amberGold font-bold">-- g</span>
+                  </div>
+                  <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-amberGold" style="width: 45%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-xs font-semibold mb-1">
+                    <span>Healthy Fats (Hormonal health & A2 Ghee)</span>
+                    <span id="wOutputFat" class="text-warmCoral font-bold">-- g</span>
+                  </div>
+                  <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-warmCoral" style="width: 20%"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-4 flex justify-between">
+                <button onclick="advanceWizard(3)" class="px-5 py-2.5 border border-slateBorder text-slate-600 font-bold rounded-xl text-xs">← Back</button>
+                <button onclick="generateAndSaveMealPlan()" class="px-8 py-3.5 bg-gradient-to-r from-royalIndigo to-freshTeal text-obsidian font-extrabold rounded-xl text-sm shadow-stripe hover:opacity-95 transition flex items-center gap-2">
+                  Generate My 7-Day Plan <span>→</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      `;
+    }
+
+    function selectWizardSex(sex) {
+      wizardData.sex = sex;
+      const maleBtn = document.getElementById('wSexMale');
+      const femaleBtn = document.getElementById('wSexFemale');
+      if (sex === 'male') {
+        maleBtn.className = "p-3.5 rounded-2xl border-2 border-royalIndigo bg-royalIndigo/10 text-xs font-bold text-royalIndigo flex items-center justify-center gap-2 transition";
+        femaleBtn.className = "p-3.5 rounded-2xl border-2 border-slateBorder text-xs font-bold text-obsidian flex items-center justify-center gap-2 transition";
+      } else {
+        femaleBtn.className = "p-3.5 rounded-2xl border-2 border-royalIndigo bg-royalIndigo/10 text-xs font-bold text-royalIndigo flex items-center justify-center gap-2 transition";
+        maleBtn.className = "p-3.5 rounded-2xl border-2 border-slateBorder text-xs font-bold text-obsidian flex items-center justify-center gap-2 transition";
+      }
+    }
+
+    function selectWizardActivity(act) {
+      wizardData.activity = act;
+      document.querySelectorAll('[id^="wAct_"]').forEach(el => {
+        el.className = "p-3 rounded-2xl border-2 border-slateBorder hover:border-royalIndigo cursor-pointer transition";
+      });
+      const selected = document.getElementById(`wAct_${act}`);
+      if (selected) selected.className = "p-3 rounded-2xl border-2 border-royalIndigo bg-royalIndigo/10 cursor-pointer transition";
+    }
+
+    function selectWizardGoal(goal) {
+      wizardData.goal = goal;
+      document.querySelectorAll('[id^="wGoal_"]').forEach(el => {
+        el.className = "p-3 rounded-2xl border-2 border-slateBorder cursor-pointer transition";
+      });
+      const selected = document.getElementById(`wGoal_${goal}`);
+      if (selected) selected.className = "p-3 rounded-2xl border-2 border-royalIndigo bg-royalIndigo/10 cursor-pointer transition";
+    }
+
+    function selectWizardDiet(diet) {
+      wizardData.diet = diet;
+      document.querySelectorAll('[id^="wDiet_"]').forEach(el => {
+        el.className = "p-2.5 rounded-xl border-2 border-slateBorder font-bold text-obsidian capitalize";
+      });
+      const selected = document.getElementById(`wDiet_${diet}`);
+      if (selected) selected.className = "p-2.5 rounded-xl border-2 border-royalIndigo bg-royalIndigo/10 font-bold text-royalIndigo capitalize";
+    }
+
+    function selectWizardRegion(reg) {
+      wizardData.region = reg;
+      document.querySelectorAll('[id^="wReg_"]').forEach(el => {
+        el.className = "p-3 rounded-xl border-2 border-slateBorder cursor-pointer text-xs font-semibold text-obsidian";
+      });
+      const selected = document.getElementById(`wReg_${reg}`);
+      if (selected) selected.className = "p-3 rounded-xl border-2 border-royalIndigo bg-royalIndigo/10 cursor-pointer text-xs font-semibold text-royalIndigo";
+    }
+
+    function advanceWizard(step) {
+      if (step === 2) {
+        if (!wizardData.sex) { showToast('Please select your biological sex', 'error'); return; }
+        if (!wizardData.age || wizardData.age < 15) { showToast('Please enter a valid age', 'error'); return; }
+        if (!wizardData.weight || wizardData.weight < 35) { showToast('Please enter your current weight', 'error'); return; }
+        if (!wizardData.height || wizardData.height < 120) { showToast('Please enter your height in cm', 'error'); return; }
+      }
+      if (step === 3) {
+        if (!wizardData.activity) { showToast('Please choose an activity level', 'error'); return; }
+        if (!wizardData.goal) { showToast('Please select your target goal', 'error'); return; }
+      }
+      if (step === 4) {
+        if (!wizardData.diet) { showToast('Please select your diet preference', 'error'); return; }
+        if (!wizardData.region) { showToast('Please select your regional cuisine', 'error'); return; }
+        
+        // Compute live values
+        const calculated = computeNutritionProfile(wizardData);
+        wizardData.nutrition = calculated;
+
+        document.getElementById('wOutputBMR').innerText = `${calculated.bmr} kcal`;
+        document.getElementById('wOutputTDEE').innerText = `${calculated.tdee} kcal`;
+        document.getElementById('wOutputTarget').innerText = `${calculated.targetCalories} kcal`;
+        document.getElementById('wOutputProtein').innerText = `${calculated.proteinG}g`;
+        document.getElementById('wOutputCarbs').innerText = `${calculated.carbsG}g`;
+        document.getElementById('wOutputFat').innerText = `${calculated.fatG}g`;
+      }
+
+      wizardStep = step;
+      document.querySelectorAll('.wizard-pane').forEach((pane, idx) => {
+        if (idx + 1 === step) {
+          pane.classList.remove('hidden');
+        } else {
+          pane.classList.add('hidden');
+        }
+      });
+
+      const pcts = { 1: '25%', 2: '50%', 3: '75%', 4: '100%' };
+      const titles = {
+        1: 'Step 1 of 4: Biological Basics',
+        2: 'Step 2 of 4: Lifestyle & Goal',
+        3: 'Step 3 of 4: Cuisine & Budget',
+        4: 'Step 4 of 4: Live Scientific Breakdown'
+      };
+      document.getElementById('stepProgressBar').style.width = pcts[step];
+      document.getElementById('stepProgressPct').innerText = `${pcts[step]} Completed`;
+      document.getElementById('stepIndicatorTitle').innerText = titles[step];
+    }
+
+    function initOnboardingWizard() {
+      // Starts 100% blank!
+      wizardStep = 1;
+    }
+
+    function generateAndSaveMealPlan() {
+      if (!appState.currentUser) {
+        appState.currentUser = { name: 'Health Achiever', email: 'user@macromint.in' };
+      }
+
+      const plan = build7DayMealPlan(wizardData.diet, wizardData.region);
+      appState.profile = {
+        ...wizardData,
+        mealPlan: plan
+      };
+      // Reset meal logs to 0% logged
+      appState.mealLogs = {};
+      saveState();
+
+      showToast('7-Day Adaptive Meal Plan Generated Successfully!');
+      router.navigate('dashboard');
+    }
+
+    // ==========================================
+    // PAGE 4: PERSONAL ADAPTIVE DASHBOARD
+    // ==========================================
+    function renderDashboardPage() {
+      const user = appState.currentUser;
+      const profile = appState.profile;
+      const nutrition = profile.nutrition || computeNutritionProfile(profile);
+      const currentDay = appState.currentDay;
+      const dayMeals = profile.mealPlan[currentDay] || profile.mealPlan['Monday'];
+
+      const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+      // Compute eaten macros for selected day
+      let eatenCalories = 0;
+      let eatenProtein = 0;
+      let eatenCarbs = 0;
+      let eatenFat = 0;
+
+      ['breakfast', 'lunch', 'dinner'].forEach(type => {
+        const key = `${currentDay}_${type}`;
+        if (appState.mealLogs[key] && dayMeals[type]) {
+          eatenCalories += dayMeals[type].calories;
+          eatenProtein += dayMeals[type].protein;
+          eatenCarbs += dayMeals[type].carbs;
+          eatenFat += dayMeals[type].fat;
+        }
+      });
+
+      const calPct = Math.min(100, Math.round((eatenCalories / nutrition.targetCalories) * 100)) || 0;
+      const proteinPct = Math.min(100, Math.round((eatenProtein / nutrition.proteinG) * 100)) || 0;
+
+      return `
+        <div class="py-8 px-4 sm:px-6 bg-canvas max-w-7xl mx-auto space-y-8">
+          
+          <!-- Top Greeting & Live Drawer Toggle -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slateBorder shadow-stripe-sm">
+            <div>
+              <div class="flex items-center gap-2">
+                <h1 class="text-2xl font-extrabold font-display text-obsidian">Namaste, ${user.name}! 🙏</h1>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-freshTeal/20 text-freshTealDark border border-freshTeal/30">
+                  Adaptive Active
+                </span>
+              </div>
+              <p class="text-xs text-slate-500 mt-1">
+                Goal: <strong class="capitalize text-obsidian">${profile.goal.replace('_', ' ')}</strong> • Budget: <strong class="text-royalIndigo">₹${profile.budget || 450}/day</strong> • Plan starts at <strong class="text-warmCoral">0% Logged</strong>
+              </p>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <button onclick="toggleProfileDrawer()" class="px-4 py-2.5 bg-slate-50 hover:bg-slate-100 border border-slateBorder text-obsidian rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                <span>⚙️</span> Edit Body Metrics
+              </button>
+              <button onclick="router.navigate('store')" class="px-4 py-2.5 bg-royalIndigo hover:bg-royalIndigoDark text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                <span>🛵</span> Order Day Meals
+              </button>
+            </div>
+          </div>
+
+          <!-- Circular Macro Rings & Progress Overview -->
+          <div class="grid md:grid-cols-4 gap-5">
+            <!-- Calorie Ring Card -->
+            <div class="bg-white p-6 rounded-3xl border border-slateBorder shadow-stripe-sm flex items-center justify-between">
+              <div>
+                <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Calories Intake</span>
+                <div class="text-2xl font-extrabold text-obsidian mt-1">${eatenCalories} <span class="text-xs font-normal text-slate-400">/ ${nutrition.targetCalories} kcal</span></div>
+                <div class="text-xs font-bold text-royalIndigo mt-1">${calPct}% of target</div>
+              </div>
+              <div class="relative w-16 h-16">
+                <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                  <path class="text-slate-100" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="text-royalIndigo progress-circle" stroke-dasharray="${calPct}, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+              </div>
+            </div>
+
+            <!-- Protein Card -->
+            <div class="bg-white p-6 rounded-3xl border border-slateBorder shadow-stripe-sm flex items-center justify-between">
+              <div>
+                <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Protein Target</span>
+                <div class="text-2xl font-extrabold text-obsidian mt-1">${eatenProtein}g <span class="text-xs font-normal text-slate-400">/ ${nutrition.proteinG}g</span></div>
+                <div class="text-xs font-bold text-freshTealDark mt-1">${proteinPct}% achieved</div>
+              </div>
+              <div class="relative w-16 h-16">
+                <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                  <path class="text-slate-100" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="text-freshTeal progress-circle" stroke-dasharray="${proteinPct}, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+              </div>
+            </div>
+
+            <!-- Carbs Card -->
+            <div class="bg-white p-6 rounded-3xl border border-slateBorder shadow-stripe-sm">
+              <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Complex Carbs</span>
+              <div class="text-xl font-extrabold text-obsidian mt-1">${eatenCarbs}g <span class="text-xs font-normal text-slate-400">/ ${nutrition.carbsG}g</span></div>
+              <div class="w-full bg-slate-100 h-2 rounded-full mt-3 overflow-hidden">
+                <div class="h-full bg-amberGold rounded-full" style="width: ${Math.min(100, Math.round((eatenCarbs / nutrition.carbsG) * 100))}%"></div>
+              </div>
+            </div>
+
+            <!-- Fat Card -->
+            <div class="bg-white p-6 rounded-3xl border border-slateBorder shadow-stripe-sm">
+              <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Healthy Fats</span>
+              <div class="text-xl font-extrabold text-obsidian mt-1">${eatenFat}g <span class="text-xs font-normal text-slate-400">/ ${nutrition.fatG}g</span></div>
+              <div class="w-full bg-slate-100 h-2 rounded-full mt-3 overflow-hidden">
+                <div class="h-full bg-warmCoral rounded-full" style="width: ${Math.min(100, Math.round((eatenFat / nutrition.fatG) * 100))}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7-Day Day Selector Bar -->
+          <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-1">
+            ${days.map(d => `
+              <button onclick="switchDashboardDay('${d}')" class="px-4 py-2.5 rounded-2xl text-xs font-bold transition flex items-center gap-2 flex-shrink-0 ${d === currentDay ? 'bg-obsidian text-white shadow-stripe-sm' : 'bg-white text-slate-600 border border-slateBorder hover:border-royalIndigo'}">
+                <span>${d === currentDay ? '📍' : '📅'}</span>
+                <span>${d}</span>
+              </button>
+            `).join('')}
+          </div>
+
+          <!-- Day's Meal Cards (Breakfast, Lunch, Dinner) -->
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg font-bold font-display text-obsidian">${currentDay}'s Planned Nutrition Schedule</h3>
+              <span class="text-xs text-slate-400">Click Checkbox to Mark Eaten</span>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+              ${['breakfast', 'lunch', 'dinner'].map(type => {
+                const dish = dayMeals[type];
+                if (!dish) return '';
+                const logKey = `${currentDay}_${type}`;
+                const isEaten = !!appState.mealLogs[logKey];
+
+                return `
+                  <div class="bg-white rounded-3xl border ${isEaten ? 'border-freshTeal bg-freshTeal/5' : 'border-slateBorder'} p-6 shadow-stripe-sm card-spring flex flex-col justify-between transition-all">
+                    <div>
+                      <div class="flex items-center justify-between mb-4">
+                        <span class="text-[10px] uppercase font-extrabold px-2.5 py-0.5 rounded-full ${type === 'breakfast' ? 'bg-amberGold/15 text-amberGold' : type === 'lunch' ? 'bg-royalIndigo/15 text-royalIndigo' : 'bg-freshTeal/20 text-freshTealDark'}">
+                          ${type}
+                        </span>
+                        
+                        <!-- Checkbox Button -->
+                        <button onclick="toggleMealEaten('${currentDay}', '${type}')" class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold transition ${isEaten ? 'bg-freshTeal text-obsidian' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'}">
+                          <span>${isEaten ? '✓ Eaten' : '○ Mark Eaten'}</span>
+                        </button>
+                      </div>
+
+                      <div class="text-4xl mb-3">${dish.emoji}</div>
+                      <h4 class="font-bold text-obsidian text-base">${dish.name}</h4>
+                      <p class="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">${dish.desc}</p>
+
+                      <!-- Macros -->
+                      <div class="grid grid-cols-3 gap-2 my-4 text-center">
+                        <div class="p-2 rounded-xl bg-slate-50 border border-slateBorder">
+                          <span class="text-[10px] text-slate-400 block">Cals</span>
+                          <strong class="text-xs text-obsidian">${dish.calories}</strong>
+                        </div>
+                        <div class="p-2 rounded-xl bg-slate-50 border border-slateBorder">
+                          <span class="text-[10px] text-slate-400 block">Protein</span>
+                          <strong class="text-xs text-royalIndigo">${dish.protein}g</strong>
+                        </div>
+                        <div class="p-2 rounded-xl bg-slate-50 border border-slateBorder">
+                          <span class="text-[10px] text-slate-400 block">Price</span>
+                          <strong class="text-xs text-obsidian">₹${dish.price}</strong>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slateBorder flex items-center justify-between gap-2">
+                      <button onclick="openSwapModal('${currentDay}', '${type}', '${dish.id}')" class="text-xs font-bold text-royalIndigo hover:underline flex items-center gap-1">
+                        <span>🔄</span> Swap Dish
+                      </button>
+                      <button onclick="addToCart('${dish.id}', 'ready')" class="px-3 py-1.5 rounded-xl bg-obsidian hover:bg-slate-800 text-white text-[11px] font-bold transition">
+                        Order Now (₹${dish.price})
+                      </button>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+
+        </div>
+      `;
+    }
+
+    function switchDashboardDay(day) {
+      appState.currentDay = day;
+      router.navigate('dashboard');
+    }
+
+    function toggleMealEaten(day, type) {
+      const key = `${day}_${type}`;
+      appState.mealLogs[key] = !appState.mealLogs[key];
+      saveState();
+      router.navigate('dashboard');
+      showToast(appState.mealLogs[key] ? `Logged ${type} as eaten! Rings updated.` : `Unchecked ${type}.`);
+    }
+
+    function initDashboardRings() {
+      // triggers animations
+    }
+
+    // --- SWAP MODAL LOGIC ---
+    let activeSwapTarget = null;
+    function openSwapModal(day, mealType, currentDishId) {
+      activeSwapTarget = { day, mealType, currentDishId };
+      const allDishes = getAllDishes();
+      const currentDish = allDishes.find(d => d.id === currentDishId);
+      
+      // Select 3 macro-equivalent alternative dishes of the same meal type
+      const alternatives = allDishes
+        .filter(d => d.id !== currentDishId && d.type === mealType)
+        .slice(0, 3);
+
+      const list = document.getElementById('swapOptionsList');
+      if (alternatives.length === 0) {
+        list.innerHTML = `<p class="text-xs text-slate-500 py-4 text-center">No alternatives found for this slot.</p>`;
+      } else {
+        list.innerHTML = alternatives.map(alt => `
+          <div onclick="executeDishSwap('${alt.id}')" class="p-3.5 rounded-2xl border border-slateBorder hover:border-royalIndigo hover:bg-slate-50 cursor-pointer flex items-center justify-between transition card-spring">
+            <div class="flex items-center gap-3">
+              <span class="text-3xl">${alt.emoji}</span>
+              <div>
+                <h5 class="font-bold text-obsidian text-xs">${alt.name}</h5>
+                <span class="text-[10px] text-slate-500">${alt.calories} kcal • ${alt.protein}g P • ${alt.carbs}g C</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="text-xs font-extrabold text-obsidian">₹${alt.price}</span>
+              <span class="block text-[10px] font-bold text-royalIndigo">Select Swap</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      document.getElementById('swapModalBackdrop').classList.remove('hidden');
+    }
+
+    function closeSwapModal() {
+      document.getElementById('swapModalBackdrop').classList.add('hidden');
+      activeSwapTarget = null;
+    }
+
+    function executeDishSwap(newDishId) {
+      if (!activeSwapTarget) return;
+      const { day, mealType } = activeSwapTarget;
+      const newDish = getAllDishes().find(d => d.id === newDishId);
+      if (newDish) {
+        appState.profile.mealPlan[day][mealType] = newDish;
+        saveState();
+        showToast(`Swapped to ${newDish.name}!`);
+        closeSwapModal();
+        router.navigate('dashboard');
+      }
+    }
+
+    // --- PROFILE DRAWER LOGIC ---
+    function toggleProfileDrawer() {
+      const drawer = document.getElementById('profileDrawer');
+      const backdrop = document.getElementById('profileDrawerBackdrop');
+      if (drawer.classList.contains('translate-x-full')) {
+        drawer.classList.remove('translate-x-full');
+        backdrop.classList.remove('hidden');
+        // prefill
+        if (appState.profile) {
+          document.getElementById('drawerWeight').value = appState.profile.weight || 70;
+          document.getElementById('drawerHeight').value = appState.profile.height || 170;
+          document.getElementById('drawerActivity').value = appState.profile.activity || 'lightly_active';
+          document.getElementById('drawerGoal').value = appState.profile.goal || 'fat_loss';
+          document.getElementById('drawerDiet').value = appState.profile.diet || 'veg';
+          document.getElementById('drawerBudget').value = appState.profile.budget || 450;
+          document.getElementById('drawerBudgetValue').innerText = `₹${appState.profile.budget || 450}`;
+        }
+      } else {
+        drawer.classList.add('translate-x-full');
+        backdrop.classList.add('hidden');
+      }
+    }
+
+    function saveProfileDrawer() {
+      appState.profile.weight = document.getElementById('drawerWeight').value;
+      appState.profile.height = document.getElementById('drawerHeight').value;
+      appState.profile.activity = document.getElementById('drawerActivity').value;
+      appState.profile.goal = document.getElementById('drawerGoal').value;
+      appState.profile.diet = document.getElementById('drawerDiet').value;
+      appState.profile.budget = document.getElementById('drawerBudget').value;
+
+      // Recalculate
+      appState.profile.nutrition = computeNutritionProfile(appState.profile);
+      saveState();
+
+      toggleProfileDrawer();
+      showToast('Profile & TDEE Metrics Updated Live!');
+      router.navigate('dashboard');
+    }
+
+    // ==========================================
+    // PAGE 5: STORE & CHECKOUT
+    // ==========================================
+    let currentStoreFilter = 'all';
+    function renderStorePage() {
+      const allDishes = getAllDishes();
+      const filtered = currentStoreFilter === 'all'
+        ? allDishes
+        : allDishes.filter(d => d.type === currentStoreFilter || d.diet === currentStoreFilter);
+
+      return `
+        <div class="py-10 px-4 sm:px-6 bg-canvas max-w-7xl mx-auto space-y-8">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <span class="text-xs uppercase font-extrabold tracking-widest text-freshTealDark">Quick-Commerce Delivery</span>
+              <h1 class="text-3xl font-extrabold font-display text-obsidian mt-1">Cloud Kitchen & Fresh Kit Store</h1>
+              <p class="text-xs text-slate-500 mt-1">Ready-to-Eat delivered in 20 mins • Fresh Pre-Portioned Kits in 9 mins</p>
+            </div>
+
+            <!-- Filter tabs -->
+            <div class="flex items-center gap-1.5 overflow-x-auto hide-scrollbar bg-white p-1 rounded-2xl border border-slateBorder shadow-stripe-sm">
+              ${[
+                { id: 'all', label: 'All Dishes' },
+                { id: 'breakfast', label: 'Breakfast' },
+                { id: 'lunch', label: 'Lunch' },
+                { id: 'dinner', label: 'Dinner' },
+                { id: 'veg', label: 'Veg Only' },
+              ].map(f => `
+                <button onclick="setStoreFilter('${f.id}')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap ${currentStoreFilter === f.id ? 'bg-obsidian text-white' : 'text-slate-600 hover:text-obsidian'}">
+                  ${f.label}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            ${filtered.map(dish => `
+              <div class="bg-white rounded-3xl border border-slateBorder p-6 shadow-stripe-sm card-spring flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="text-4xl">${dish.emoji}</span>
+                    <span class="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700">${dish.category || 'Indian'}</span>
+                  </div>
+                  <h4 class="font-bold text-obsidian text-base">${dish.name}</h4>
+                  <p class="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">${dish.desc || 'High protein Indian nutrition meal.'}</p>
+                  
+                  <div class="grid grid-cols-4 gap-1.5 my-4 text-center">
+                    <div class="p-2 rounded-xl bg-slate-50 border border-slateBorder">
+                      <span class="text-[9px] text-slate-400 block">Cals</span>
+                      <strong class="text-xs text-obsidian">${dish.calories}</strong>
+                    </div>
+                    <div class="p-2 rounded-xl bg-slate-50 border border-slateBorder">
+                      <span class="text-[9px] text-slate-400 block">Protein</span>
+                      <strong class="text-xs text-royalIndigo">${dish.protein}g</strong>
+                    </div>
+                    <div class="p-2 rounded-xl bg-slate-50 border border-slateBorder">
+                      <span class="text-[9px] text-slate-400 block">Carbs</span>
+                      <strong class="text-xs text-slate-700">${dish.carbs}g</strong>
+                    </div>
+                    <div class="p-2 rounded-xl bg-slate-50 border border-slateBorder">
+                      <span class="text-[9px] text-slate-400 block">Fat</span>
+                      <strong class="text-xs text-slate-700">${dish.fat}g</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-4 border-t border-slateBorder flex items-center justify-between">
+                  <div>
+                    <span class="text-[10px] text-slate-400 block">Price</span>
+                    <strong class="text-lg text-obsidian">₹${dish.price}</strong>
+                  </div>
+                  <div class="flex gap-2">
+                    <button onclick="addToCart('${dish.id}', 'kit')" class="px-3 py-2 border border-slateBorder hover:border-freshTeal text-obsidian rounded-xl text-xs font-bold transition">
+                      Fresh Kit (₹${Math.round(dish.price * 0.85)})
+                    </button>
+                    <button onclick="addToCart('${dish.id}', 'ready')" class="px-4 py-2 bg-royalIndigo hover:bg-royalIndigoDark text-white rounded-xl text-xs font-bold transition shadow-sm">
+                      Ready-to-Eat
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function setStoreFilter(f) {
+      currentStoreFilter = f;
+      router.navigate('store');
+    }
+
+    // ==========================================
+    // CHECKOUT PAGE
+    // ==========================================
+    let checkoutPaymentMethod = 'upi';
+    function renderCheckoutPage() {
+      const subtotal = appState.cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+
+      return `
+        <div class="py-10 px-4 sm:px-6 bg-canvas max-w-5xl mx-auto">
+          <div class="mb-8">
+            <span class="text-xs uppercase font-extrabold tracking-widest text-royalIndigo">Secure Order Gateway</span>
+            <h1 class="text-3xl font-extrabold font-display text-obsidian mt-1">Multi-Method Checkout</h1>
+            <p class="text-xs text-slate-500 mt-1">Stripe-style encryption & dynamic UPI bank verification</p>
+          </div>
+
+          <div class="grid lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Left: Delivery Address Form -->
+            <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-3xl border border-slateBorder shadow-stripe-sm space-y-4">
+              <h3 class="font-bold text-obsidian text-base border-b border-slateBorder pb-3">1. Delivery Address & Contact</h3>
+              
+              <div class="grid sm:grid-cols-2 gap-3 text-xs">
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Full Name *</label>
+                  <input type="text" id="chkName" value="${appState.currentUser ? appState.currentUser.name : ''}" required class="w-full px-3 py-2 border border-slateBorder rounded-xl">
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Phone Number (10 digits) *</label>
+                  <input type="tel" id="chkPhone" placeholder="9876543210" maxlength="10" required class="w-full px-3 py-2 border border-slateBorder rounded-xl">
+                </div>
+              </div>
+
+              <div class="text-xs">
+                <label class="block font-semibold text-slate-700 mb-1">Flat / House No / Building *</label>
+                <input type="text" id="chkAddress" placeholder="Flat 402, Green Glen Residency" required class="w-full px-3 py-2 border border-slateBorder rounded-xl">
+              </div>
+
+              <div class="grid sm:grid-cols-2 gap-3 text-xs">
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Area / Landmark</label>
+                  <input type="text" id="chkLandmark" placeholder="Near HSR Club" class="w-full px-3 py-2 border border-slateBorder rounded-xl">
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">PIN Code *</label>
+                  <input type="text" id="chkPincode" placeholder="560102" maxlength="6" required class="w-full px-3 py-2 border border-slateBorder rounded-xl">
+                </div>
+              </div>
+
+              <!-- Payment Method Tabs -->
+              <h3 class="font-bold text-obsidian text-base border-b border-slateBorder pb-3 pt-4">2. Select Payment Method</h3>
+              
+              <div class="grid grid-cols-3 gap-2 text-xs">
+                <button type="button" onclick="selectPaymentMethod('upi')" id="pmTab_upi" class="p-3 rounded-2xl border-2 border-royalIndigo bg-royalIndigo/10 text-royalIndigo font-bold flex flex-col items-center gap-1">
+                  <span>📱</span> UPI / QR
+                </button>
+                <button type="button" onclick="selectPaymentMethod('card')" id="pmTab_card" class="p-3 rounded-2xl border-2 border-slateBorder text-slate-600 font-bold flex flex-col items-center gap-1">
+                  <span>💳</span> Card
+                </button>
+                <button type="button" onclick="selectPaymentMethod('cod')" id="pmTab_cod" class="p-3 rounded-2xl border-2 border-slateBorder text-slate-600 font-bold flex flex-col items-center gap-1">
+                  <span>💵</span> Pay on Delivery
+                </button>
+              </div>
+
+              <!-- UPI Section -->
+              <div id="paymentPane_upi" class="p-5 rounded-2xl bg-canvas border border-slateBorder space-y-4">
+                <div class="flex items-center gap-4">
+                  <!-- Dynamic SVG QR Code -->
+                  <div class="w-28 h-28 bg-white p-2 rounded-xl border border-slateBorder shadow-sm flex-shrink-0 flex items-center justify-center">
+                    <svg viewBox="0 0 100 100" class="w-full h-full text-obsidian">
+                      <rect width="100" height="100" fill="white" />
+                      <!-- QR pattern simulation -->
+                      <rect x="10" y="10" width="25" height="25" fill="#0A2540" />
+                      <rect x="15" y="15" width="15" height="15" fill="white" />
+                      <rect x="65" y="10" width="25" height="25" fill="#0A2540" />
+                      <rect x="70" y="15" width="15" height="15" fill="white" />
+                      <rect x="10" y="65" width="25" height="25" fill="#0A2540" />
+                      <rect x="15" y="70" width="15" height="15" fill="white" />
+                      <rect x="42" y="42" width="16" height="16" fill="#635BFF" rx="4" />
+                      <circle cx="50" cy="50" r="4" fill="white" />
+                      <!-- dots -->
+                      <rect x="40" y="15" width="6" height="6" fill="#0A2540" />
+                      <rect x="52" y="15" width="6" height="6" fill="#0A2540" />
+                      <rect x="15" y="40" width="6" height="6" fill="#0A2540" />
+                      <rect x="80" y="45" width="8" height="8" fill="#0A2540" />
+                      <rect x="45" y="75" width="12" height="6" fill="#0A2540" />
+                      <rect x="68" y="70" width="18" height="18" fill="#0A2540" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-freshTealDark bg-freshTeal/20 px-2 py-0.5 rounded">Scan & Pay via GPay / PhonePe</span>
+                    <p class="text-xs text-slate-500 mt-1">Or enter UPI ID for verification simulation:</p>
+                    <input type="text" id="chkUpiId" placeholder="name@okicici" class="w-full mt-2 px-3 py-1.5 border border-slateBorder rounded-lg text-xs">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card Section -->
+              <div id="paymentPane_card" class="p-5 rounded-2xl bg-canvas border border-slateBorder space-y-3 hidden">
+                <div class="text-xs">
+                  <label class="block font-semibold text-slate-700 mb-1">Card Number (16 Digits)</label>
+                  <input type="text" id="chkCardNum" placeholder="4532 •••• •••• 8892" maxlength="19" class="w-full px-3 py-2 border border-slateBorder rounded-xl font-mono text-sm" oninput="formatCardInput(this)">
+                </div>
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                  <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Expiry (MM/YY)</label>
+                    <input type="text" id="chkCardExpiry" placeholder="08/28" maxlength="5" class="w-full px-3 py-2 border border-slateBorder rounded-xl font-mono">
+                  </div>
+                  <div>
+                    <label class="block font-semibold text-slate-700 mb-1">CVV</label>
+                    <input type="password" id="chkCardCvv" placeholder="•••" maxlength="3" class="w-full px-3 py-2 border border-slateBorder rounded-xl font-mono">
+                  </div>
+                </div>
+                <div class="text-xs">
+                  <label class="block font-semibold text-slate-700 mb-1">Cardholder Name</label>
+                  <input type="text" id="chkCardName" placeholder="AARAV SHARMA" class="w-full px-3 py-2 border border-slateBorder rounded-xl">
+                </div>
+              </div>
+
+              <!-- COD Section -->
+              <div id="paymentPane_cod" class="p-5 rounded-2xl bg-canvas border border-slateBorder space-y-1 hidden">
+                <h4 class="font-bold text-obsidian text-xs">Cash on Delivery</h4>
+                <p class="text-xs text-slate-500">Pay cash or scan QR when delivery rider arrives at your doorstep.</p>
+              </div>
+
+            </div>
+
+            <!-- Right: Order Summary Sidebar -->
+            <div class="lg:col-span-5 bg-white p-6 rounded-3xl border border-slateBorder shadow-stripe-sm space-y-4">
+              <h3 class="font-bold text-obsidian text-base border-b border-slateBorder pb-3">Order Invoice Summary</h3>
+              
+              <div class="space-y-2.5 max-h-60 overflow-y-auto pr-1">
+                ${appState.cart.map(i => `
+                  <div class="flex justify-between items-center text-xs">
+                    <div>
+                      <div class="font-semibold text-obsidian">${i.emoji} ${i.name}</div>
+                      <div class="text-[10px] text-slate-400">Qty: ${i.qty} • ${i.type === 'kit' ? '9-Min Kit' : 'Ready'}</div>
+                    </div>
+                    <span class="font-bold text-obsidian">₹${i.price * i.qty}</span>
+                  </div>
+                `).join('')}
+              </div>
+
+              <div class="pt-4 border-t border-slateBorder space-y-2 text-xs">
+                <div class="flex justify-between text-slate-600"><span>Item Total</span><span>₹${subtotal}</span></div>
+                <div class="flex justify-between text-slate-600"><span>GST & Kitchen Packaging</span><span>₹15</span></div>
+                <div class="flex justify-between text-slate-600"><span>Delivery Speed (20 mins)</span><span class="text-freshTeal font-bold">FREE</span></div>
+                <div class="flex justify-between text-base font-extrabold text-obsidian pt-2 border-t border-slateBorder">
+                  <span>Grand Total</span>
+                  <span class="text-royalIndigo">₹${subtotal + 15}</span>
+                </div>
+              </div>
+
+              <!-- Submit Payment Button -->
+              <div class="pt-4">
+                <button id="btnPayOrder" onclick="processOrderCheckout()" class="w-full py-4 bg-gradient-to-r from-royalIndigo to-freshTeal hover:opacity-95 text-obsidian font-extrabold text-sm rounded-2xl shadow-stripe transition flex items-center justify-center gap-2">
+                  <span>🔒</span> Confirm & Verify Payment (₹${subtotal + 15})
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      `;
+    }
+
+    function selectPaymentMethod(pm) {
+      checkoutPaymentMethod = pm;
+      ['upi', 'card', 'cod'].forEach(m => {
+        const tab = document.getElementById(`pmTab_${m}`);
+        const pane = document.getElementById(`paymentPane_${m}`);
+        if (m === pm) {
+          tab.className = "p-3 rounded-2xl border-2 border-royalIndigo bg-royalIndigo/10 text-royalIndigo font-bold flex flex-col items-center gap-1";
+          pane.classList.remove('hidden');
+        } else {
+          tab.className = "p-3 rounded-2xl border-2 border-slateBorder text-slate-600 font-bold flex flex-col items-center gap-1";
+          pane.classList.add('hidden');
+        }
+      });
+    }
+
+    function formatCardInput(input) {
+      let v = input.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+      let matches = v.match(/\d{4,16}/g);
+      let match = (matches && matches[0]) || '';
+      let parts = [];
+      for (let i = 0, len = match.length; i < len; i += 4) {
+        parts.push(match.substring(i, i + 4));
+      }
+      input.value = parts.length ? parts.join(' ') : v;
+    }
+
+    function initCheckoutPage() {}
+
+    function processOrderCheckout() {
+      const name = document.getElementById('chkName').value;
+      const phone = document.getElementById('chkPhone').value;
+      const addr = document.getElementById('chkAddress').value;
+
+      if (!name || !phone || !addr) {
+        showToast('Please fill in required delivery details', 'error');
+        return;
+      }
+      if (phone.length < 10) {
+        showToast('Please enter a valid 10-digit phone number', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('btnPayOrder');
+      btn.disabled = true;
+      btn.innerHTML = `<span class="animate-spin">🔄</span> Verifying Bank Authorization (2s)...`;
+
+      // 2-second realistic bank simulation
+      setTimeout(() => {
+        const orderId = 'MM-' + Math.floor(100000 + Math.random() * 900000);
+        const subtotal = appState.cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+
+        appState.lastOrder = {
+          id: orderId,
+          date: new Date().toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }),
+          items: [...appState.cart],
+          total: subtotal + 15,
+          method: checkoutPaymentMethod.toUpperCase(),
+          address: `${addr}, ${document.getElementById('chkLandmark').value || ''}, PIN: ${document.getElementById('chkPincode').value || '560102'}`,
+          phone: phone,
+          name: name,
+          estimatedMinutes: 20
+        };
+
+        // Clear cart
+        appState.cart = [];
+        saveState();
+
+        showToast(`Payment Approved! Order ${orderId} placed.`);
+        router.navigate('order');
+      }, 2000);
+    }
+
+    // ==========================================
+    // ORDER TRACKING & PRINTABLE INVOICE PAGE
+    // ==========================================
+    let countdownInterval = null;
+    let orderSecondsLeft = 20 * 60; // 20 mins
+
+    function renderOrderPage() {
+      const order = appState.lastOrder;
+      if (!order) {
+        return `
+          <div class="py-20 text-center text-slate-500">
+            <p>No active orders found.</p>
+            <button onclick="router.navigate('store')" class="mt-4 px-4 py-2 bg-royalIndigo text-white rounded-xl text-xs font-bold">Browse Kitchen Store</button>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="py-10 px-4 sm:px-6 bg-canvas max-w-4xl mx-auto space-y-8">
+          
+          <!-- Tracking Header Card -->
+          <div class="bg-obsidian text-white p-8 rounded-3xl shadow-stripe-lg relative overflow-hidden">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <span class="text-xs uppercase font-extrabold tracking-widest text-freshTeal">Live Rider GPS Active</span>
+                <h1 class="text-3xl font-extrabold font-display mt-1">Order #${order.id}</h1>
+                <p class="text-xs text-slate-400 mt-1">Dispatched from HSR Layout Cloud Kitchen Hub</p>
+              </div>
+
+              <!-- Estimated Delivery Countdown -->
+              <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 text-center min-w-[160px]">
+                <span class="text-[10px] text-slate-300 uppercase tracking-wider">Estimated Delivery</span>
+                <div class="text-3xl font-black font-mono text-freshTeal mt-0.5" id="orderCountdownDisplay">19:59</div>
+                <span class="text-[10px] text-slate-400">Rider on Electric Scooter</span>
+              </div>
+            </div>
+
+            <!-- 5-Stage Animated Progress -->
+            <div class="mt-8 pt-6 border-t border-white/10">
+              <div class="grid grid-cols-5 gap-2 text-center text-[11px] font-bold">
+                <div class="text-freshTeal">
+                  <div class="w-8 h-8 rounded-full bg-freshTeal text-obsidian flex items-center justify-center mx-auto mb-1">✓</div>
+                  <span>Order Placed</span>
+                </div>
+                <div class="text-freshTeal">
+                  <div class="w-8 h-8 rounded-full bg-freshTeal text-obsidian flex items-center justify-center mx-auto mb-1">✓</div>
+                  <span>Kitchen Prep</span>
+                </div>
+                <div class="text-freshTeal animate-pulse">
+                  <div class="w-8 h-8 rounded-full bg-freshTeal/20 text-freshTeal flex items-center justify-center mx-auto mb-1">🛵</div>
+                  <span>Rider Assigned</span>
+                </div>
+                <div class="text-slate-400">
+                  <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-1">📍</div>
+                  <span>Out for Delivery</span>
+                </div>
+                <div class="text-slate-400">
+                  <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-1">🏠</div>
+                  <span>Delivered</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Printable Order Receipt & Macro Invoice Card -->
+          <div id="printableInvoice" class="bg-white p-8 rounded-3xl border border-slateBorder shadow-stripe-sm space-y-6">
+            <div class="flex justify-between items-start border-b border-slateBorder pb-4">
+              <div>
+                <h3 class="font-extrabold text-obsidian text-lg">Official Macro Receipt & Tax Invoice</h3>
+                <p class="text-xs text-slate-500">MacroMint Technologies India Pvt Ltd • GSTIN: 29AAAAA0000A1Z5</p>
+              </div>
+              <button onclick="window.print()" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-obsidian rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                <span>🖨️</span> Print / Save PDF
+              </button>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-4 text-xs text-slate-600">
+              <div>
+                <strong class="text-obsidian block mb-1">Delivering To:</strong>
+                <p>${order.name}</p>
+                <p>${order.address}</p>
+                <p>Phone: ${order.phone}</p>
+              </div>
+              <div class="sm:text-right">
+                <strong class="text-obsidian block mb-1">Order Details:</strong>
+                <p>Date: ${order.date}</p>
+                <p>Payment: <span class="font-bold text-freshTealDark">${order.method}</span></p>
+                <p>Status: <span class="font-bold text-royalIndigo">In Transit (HACCP Safe)</span></p>
+              </div>
+            </div>
+
+            <!-- Items Table -->
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="border-b border-slateBorder text-slate-400 text-[10px] uppercase">
+                  <th class="py-2">Item & Formulation</th>
+                  <th class="py-2 text-center">Qty</th>
+                  <th class="py-2 text-center">Calories</th>
+                  <th class="py-2 text-center">Protein</th>
+                  <th class="py-2 text-right">Amount</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                ${order.items.map(item => `
+                  <tr>
+                    <td class="py-3 font-semibold text-obsidian">${item.emoji} ${item.name} (${item.type === 'kit' ? '9-Min Kit' : 'Ready'})</td>
+                    <td class="py-3 text-center text-slate-600">${item.qty}</td>
+                    <td class="py-3 text-center text-slate-600">${item.calories * item.qty} kcal</td>
+                    <td class="py-3 text-center text-royalIndigo font-bold">${item.protein * item.qty}g</td>
+                    <td class="py-3 text-right font-bold text-obsidian">₹${item.price * item.qty}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+
+            <div class="pt-4 border-t border-slateBorder flex justify-between items-center">
+              <div class="text-xs text-slate-500">
+                Total Nutrition Delivered: <strong>${order.items.reduce((s, i) => s + (i.calories * i.qty), 0)} kcal</strong> | <strong>${order.items.reduce((s, i) => s + (i.protein * i.qty), 0)}g Protein</strong>
+              </div>
+              <div class="text-right">
+                <span class="text-xs text-slate-400 block">Total Paid</span>
+                <span class="text-2xl font-extrabold text-royalIndigo">₹${order.total}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <button onclick="router.navigate('dashboard')" class="text-xs font-bold text-royalIndigo hover:underline">
+              ← Return to Adaptive Nutrition Dashboard
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function initOrderCountdown() {
+      if (countdownInterval) clearInterval(countdownInterval);
+      orderSecondsLeft = 20 * 60;
+      countdownInterval = setInterval(() => {
+        orderSecondsLeft--;
+        if (orderSecondsLeft <= 0) {
+          clearInterval(countdownInterval);
+          return;
+        }
+        const m = Math.floor(orderSecondsLeft / 60);
+        const s = orderSecondsLeft % 60;
+        const display = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        const el = document.getElementById('orderCountdownDisplay');
+        if (el) el.innerText = display;
+      }, 1000);
+    }
+
+    // ==========================================
+    // MODULE 6: AI NUTRITION CHATBOT & TRAINING STUDIO
+    // ==========================================
+    function toggleChatWindow() {
+      const win = document.getElementById('aiChatWindow');
+      win.classList.toggle('hidden');
+    }
+
+    function openTrainModal() {
+      document.getElementById('trainModalBackdrop').classList.remove('hidden');
+    }
+
+    function closeTrainModal() {
+      document.getElementById('trainModalBackdrop').classList.add('hidden');
+    }
+
+    function sendQuickPrompt(text) {
+      document.getElementById('chatInput').value = text;
+      handleChatSubmit(new Event('submit'));
+    }
+
+    function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendChatMessage('user', text);
+      input.value = '';
+
+      // Generate Knowledge-Grounded AI Response
+      setTimeout(() => {
+        const response = generateAIResponse(text);
+        appendChatMessage('ai', response);
+      }, 500);
+    }
+
+    function appendChatMessage(role, content) {
+      const container = document.getElementById('chatMessages');
+      const div = document.createElement('div');
+      div.className = "flex gap-2 " + (role === 'user' ? 'justify-end' : '');
+      
+      if (role === 'user') {
+        div.innerHTML = `
+          <div class="bg-royalIndigo text-white p-3 rounded-2xl rounded-tr-sm text-xs leading-relaxed max-w-[80%]">
+            ${content}
+          </div>
+        `;
+      } else {
+        div.innerHTML = `
+          <div class="w-6 h-6 rounded-full bg-freshTeal/20 text-freshTeal text-[10px] flex items-center justify-center font-bold flex-shrink-0 mt-0.5">AI</div>
+          <div class="bg-slate-100 p-3 rounded-2xl rounded-tl-sm text-slate-700 leading-relaxed max-w-[80%]">
+            ${content}
+          </div>
+        `;
+      }
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function generateAIResponse(query) {
+      const q = query.toLowerCase();
+      const customDishes = appState.customDishes;
+
+      // Check trained knowledge first!
+      for (const d of customDishes) {
+        if (q.includes(d.name.toLowerCase()) || q.includes(d.id)) {
+          return `I was trained on <strong>${d.name}</strong>! It delivers <strong>${d.calories} kcal</strong>, <strong>${d.protein}g protein</strong>, ${d.carbs}g carbs at ₹${d.price}. Insight: ${d.desc || 'Optimized Indian nutrition recipe.'}`;
+        }
+      }
+
+      if (q.includes('bmr') || q.includes('formula')) {
+        return `We calculate your Basal Metabolic Rate via the <strong>Mifflin-St Jeor</strong> formula: Male = 10W + 6.25H - 5A + 5 | Female = 10W + 6.25H - 5A - 161. TDEE multiplies this by 1.2 to 1.9 depending on activity.`;
+      }
+      if (q.includes('protein') || q.includes('target')) {
+        return `For fat loss in Indian diets, we recommend <strong>2.0g protein per kg bodyweight</strong> to maintain muscle mass while burning visceral fat. Combine lentils with whole grains or dairy/eggs for a complete amino acid profile.`;
+      }
+      if (q.includes('ragi') || q.includes('millet')) {
+        return `Ragi (Finger Millet) contains <strong>344mg Calcium per 100g</strong> and high polyphenol fiber. It causes a slower insulin response than polished white rice, making our Ragi Dosa ideal for fat loss & diabetes management.`;
+      }
+      if (q.includes('recommend') || q.includes('dinner') || q.includes('veg')) {
+        return `I recommend our <strong>Homestyle Dal Tadka & 3 Whole Wheat Phulkas (380 kcal, 16g P, ₹120)</strong> or the <strong>Palak Tofu Brown Rice Medley (360 kcal, 20g P, ₹160)</strong>. Both are in our kitchen menu now!`;
+      }
+      if (q.includes('paneer') || q.includes('chicken')) {
+        return `100g malai paneer provides ~18g protein and 20g fat (260 kcal), whereas 100g skinless chicken breast provides ~31g protein and only 3.6g fat (165 kcal). For pure lean protein, chicken wins; for vegetarians, pair paneer with roasted sattu or Greek raita!`;
+      }
+
+      return `Great question! At MacroMint, every recipe maps to your personal TDEE. You can check your 7-Day Plan tab or ask me for macro breakdowns of specific Indian recipes.`;
+    }
+
+    function handleTrainSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('trainName').value;
+      const cals = parseInt(document.getElementById('trainCals').value);
+      const protein = parseInt(document.getElementById('trainProtein').value);
+      const carbs = parseInt(document.getElementById('trainCarbs').value);
+      const fat = parseInt(document.getElementById('trainFat').value);
+      const price = parseInt(document.getElementById('trainPrice').value);
+      const desc = document.getElementById('trainInsight').value;
+
+      const newDish = {
+        id: name.toLowerCase().replace(/\s+/g, '-'),
+        name: name,
+        type: 'lunch',
+        category: 'Custom Trained',
+        diet: 'veg',
+        calories: cals,
+        protein: protein,
+        carbs: carbs,
+        fat: fat,
+        price: price,
+        prepMins: 12,
+        badge: 'Custom Recipe',
+        emoji: '🍲',
+        desc: desc || 'Custom user-trained Indian recipe.'
+      };
+
+      appState.customDishes.push(newDish);
+      saveState();
+
+      closeTrainModal();
+      showToast(`Trained AI on "${name}"! It is now part of the active neural knowledge base.`);
+      
+      // Auto prompt in chat
+      if (document.getElementById('aiChatWindow').classList.contains('hidden')) {
+        toggleChatWindow();
+      }
+      appendChatMessage('ai', `✅ <strong>Knowledge Updated!</strong> I have learned the nutrition metrics for <strong>${name}</strong> (${cals} kcal, ${protein}g protein, ₹${price}). You can now ask me questions about it!`);
+    }
+
+    // --- APPLICATION BOOTSTRAP ---
+    window.addEventListener('DOMContentLoaded', () => {
+      // Check if user came from an existing session
+      updateCartBadge();
+      router.navigate('landing');
+    });
+  </script>
+</body>
+</html>
+

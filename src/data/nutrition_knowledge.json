@@ -1,0 +1,205 @@
+{
+  "dishes": [
+    {
+      "id": "ragi-dosa",
+      "name": "Ragi Dosa with Coconut Chutney",
+      "category": "South Indian",
+      "type": "breakfast",
+      "diet": ["veg", "vegan", "jain"],
+      "calories": 285,
+      "protein": 9,
+      "carbs": 48,
+      "fat": 7,
+      "fiber": 4.2,
+      "price": 95,
+      "prepTime": 9,
+      "image": "🫓",
+      "description": "Crispy fermented ragi dosa with fresh coconut chutney and sambar",
+      "ingredients": ["Ragi flour", "Rice flour", "Urad dal", "Coconut", "Green chilli", "Curry leaves"],
+      "tags": ["High Fiber", "Iron Rich", "Diabetic Friendly"]
+    },
+    {
+      "id": "paneer-tikka-bowl",
+      "name": "Paneer Tikka Power Bowl",
+      "category": "North Indian",
+      "type": "lunch",
+      "diet": ["veg"],
+      "calories": 420,
+      "protein": 28,
+      "carbs": 35,
+      "fat": 18,
+      "fiber": 3.1,
+      "price": 185,
+      "prepTime": 20,
+      "image": "🥗",
+      "description": "Chargrilled paneer tikka over quinoa-rice blend with mint raita",
+      "ingredients": ["Paneer 150g", "Bell peppers", "Quinoa", "Basmati rice", "Yogurt", "Spices"],
+      "tags": ["High Protein", "Muscle Gain", "Low Carb"]
+    },
+    {
+      "id": "dal-tadka-phulka",
+      "name": "Dal Tadka & Phulka Set",
+      "category": "Pan-Indian",
+      "type": "dinner",
+      "diet": ["veg", "vegan"],
+      "calories": 380,
+      "protein": 16,
+      "carbs": 60,
+      "fat": 9,
+      "fiber": 8.4,
+      "price": 120,
+      "prepTime": 15,
+      "image": "🫕",
+      "description": "Yellow dal tempered with ghee, cumin & hing with 3 whole wheat phulkas",
+      "ingredients": ["Toor dal", "Whole wheat flour", "Ghee", "Cumin", "Asafoetida", "Tomato"],
+      "tags": ["High Fiber", "Complete Protein", "Budget Friendly"]
+    },
+    {
+      "id": "grilled-chicken-millet",
+      "name": "Grilled Chicken Millet Bowl",
+      "category": "Pan-Indian",
+      "type": "lunch",
+      "diet": ["non_veg"],
+      "calories": 495,
+      "protein": 42,
+      "carbs": 40,
+      "fat": 14,
+      "fiber": 5.2,
+      "price": 220,
+      "prepTime": 20,
+      "image": "🍗",
+      "description": "Herb-marinated grilled chicken breast over foxtail millet with roasted vegetables",
+      "ingredients": ["Chicken breast 200g", "Foxtail millet", "Bell peppers", "Olive oil", "Herbs", "Lemon"],
+      "tags": ["High Protein", "Fat Loss", "Gluten Free"]
+    },
+    {
+      "id": "masala-oats-bowl",
+      "name": "Masala Oats Veggie Bowl",
+      "category": "Pan-Indian",
+      "type": "breakfast",
+      "diet": ["veg", "vegan"],
+      "calories": 310,
+      "protein": 11,
+      "carbs": 52,
+      "fat": 7,
+      "fiber": 6.8,
+      "price": 85,
+      "prepTime": 9,
+      "image": "🥣",
+      "description": "Steel-cut oats with turmeric, mixed veggies and roasted peanut garnish",
+      "ingredients": ["Steel cut oats", "Carrot", "Beans", "Peanuts", "Turmeric", "Mustard seeds"],
+      "tags": ["Heart Healthy", "High Fiber", "Quick Prep"]
+    },
+    {
+      "id": "egg-bhurji-toast",
+      "name": "Masala Egg Bhurji with Toast",
+      "category": "Pan-Indian",
+      "type": "breakfast",
+      "diet": ["eggetarian"],
+      "calories": 365,
+      "protein": 22,
+      "carbs": 30,
+      "fat": 16,
+      "fiber": 2.1,
+      "price": 110,
+      "prepTime": 9,
+      "image": "🍳",
+      "description": "Spiced scrambled eggs with onion, tomato, coriander on multigrain toast",
+      "ingredients": ["Eggs 3", "Multigrain bread", "Onion", "Tomato", "Green chilli", "Butter"],
+      "tags": ["High Protein", "Quick Prep", "Morning Boost"]
+    },
+    {
+      "id": "chole-rice",
+      "name": "Chole Masala with Brown Rice",
+      "category": "North Indian",
+      "type": "lunch",
+      "diet": ["veg", "vegan", "jain"],
+      "calories": 445,
+      "protein": 18,
+      "carbs": 72,
+      "fat": 10,
+      "fiber": 12.1,
+      "price": 140,
+      "prepTime": 20,
+      "image": "🫘",
+      "description": "Slow-cooked chickpea masala with brown rice and onion-coriander salad",
+      "ingredients": ["Chickpeas", "Brown rice", "Tomato", "Onion", "Spices", "Coriander"],
+      "tags": ["High Fiber", "Plant Protein", "Iron Rich"]
+    },
+    {
+      "id": "kerala-fish-curry",
+      "name": "Kerala Fish Curry & Rice",
+      "category": "South Indian",
+      "type": "lunch",
+      "diet": ["non_veg"],
+      "calories": 460,
+      "protein": 35,
+      "carbs": 48,
+      "fat": 15,
+      "fiber": 2.8,
+      "price": 195,
+      "prepTime": 20,
+      "image": "🐟",
+      "description": "Tangy coconut milk fish curry with steamed Kerala red rice",
+      "ingredients": ["Pomfret 150g", "Coconut milk", "Kerala red rice", "Kokum", "Green chilli", "Curry leaves"],
+      "tags": ["Omega-3 Rich", "High Protein", "Traditional"]
+    }
+  ],
+  "nutrition_rules": [
+    {
+      "rule": "bmr_mifflin_male",
+      "formula": "10 * weight_kg + 6.25 * height_cm - 5 * age + 5"
+    },
+    {
+      "rule": "bmr_mifflin_female",
+      "formula": "10 * weight_kg + 6.25 * height_cm - 5 * age - 161"
+    },
+    {
+      "rule": "activity_multipliers",
+      "values": {
+        "sedentary": 1.2,
+        "lightly_active": 1.375,
+        "moderately_active": 1.55,
+        "very_active": 1.725,
+        "extra_active": 1.9
+      }
+    },
+    {
+      "rule": "goal_calorie_adjustments",
+      "values": {
+        "fat_loss": -500,
+        "muscle_gain": 300,
+        "recomposition": 0,
+        "maintenance": 0
+      }
+    },
+    {
+      "rule": "protein_targets_g_per_kg",
+      "values": {
+        "fat_loss": 2.2,
+        "muscle_gain": 2.0,
+        "recomposition": 2.4,
+        "maintenance": 1.6
+      }
+    }
+  ],
+  "faqs": [
+    {
+      "q": "What is BMR?",
+      "a": "BMR (Basal Metabolic Rate) is the number of calories your body burns at complete rest to maintain vital functions like breathing, circulation, and cell production."
+    },
+    {
+      "q": "What is TDEE?",
+      "a": "TDEE (Total Daily Energy Expenditure) is your BMR multiplied by your activity level — the total calories you burn in a day including exercise."
+    },
+    {
+      "q": "How does MacroMint adapt to Indian diets?",
+      "a": "MacroMint's AI is trained on 500+ authentic Indian recipes across regional cuisines. It maps your macro targets to real dishes available in India — from ragi dosas to paneer tikka bowls — factoring in seasonal availability and budget."
+    },
+    {
+      "q": "Are the meals delivered fresh?",
+      "a": "Yes! Ready-to-Eat meals are delivered within 20 minutes. Fresh Ingredient Kits (pre-portioned) are delivered within 9 minutes for home cooking."
+    }
+  ]
+}
+
